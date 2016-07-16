@@ -1,0 +1,58 @@
+#include "recorrido.cpp"
+#include <cstdio>
+
+void recorrido(int EO, int NS, int E, int Esquinas[][2], int C, int Conexiones[][2], int *perimetro, int *manzanas);
+
+using namespace std;
+
+#define  LEER()   do  fgets( lin, SIZE, stdin ) ;   while(  lin[0] == '#'  )
+
+int Esquinas[200000][2];
+int Conexiones[250000][2];
+
+int main()
+{
+    freopen("recorrido.in", "r", stdin);
+
+    #define SIZE 256
+    char lin[SIZE];
+
+    LEER();
+    int EO, NS, E;
+    sscanf(lin, "%d%d%d", &EO, &NS, &E);
+
+    int i;
+    for(i=0; i < E; i++)
+    {
+        LEER();
+        sscanf(lin, "%d%d", &Esquinas[i][0], &Esquinas[i][1]);
+    }
+
+    LEER();
+    int C;
+    sscanf(lin, "%d", &C);
+
+    for(i=0; i < C; i++)
+    {
+        LEER();
+        sscanf(lin, "%d%d", &Conexiones[i][0], &Conexiones[i][1]);
+    }
+
+
+    int perimetro, manzanas;
+    recorrido(EO, NS, E, Esquinas, C, Conexiones, &perimetro, &manzanas);
+    printf("Archivo con %d esquinas y %d conexiones da perimetro %d y manzanas %d\n", E, C, perimetro, manzanas);
+    return 0;
+}
+
+//Funcion
+
+#include "recorrido.h"
+#include<iostream>
+using namespace std;
+void recorrido(int EO, int NS, int E, int Esquinas[][2], int C, int Conexiones[][2], int *perimetro, int *manzanas) {
+    // SE ESPERA CODIGO DE UNA SOLUCION AQUI
+    cout << "Hola unsam";
+    *perimetro = -1;
+    *manzanas  = -1;
+}
