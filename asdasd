@@ -1,0 +1,34 @@
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <stdlib.h>
+#include <cmath>
+using namespace std;
+
+int main(){
+    int n,k,input;
+    long double act;
+    vector<int> v;
+    cin >> n >> k;
+    
+    for(int i=0;i<n;i++){
+        cin >> input;
+        v.push_back(input);
+    }
+    
+    sort(v.begin(),v.end());
+    
+    act = abs(v[0]);
+    if(act < abs(v[v.size()-1]-k)) act = abs(k-v[v.size()-1]);
+    
+    for(int i=1;i<n-1;i++){
+        if(act < abs(v[i]-v[i+1])/2.0){
+            act=abs(v[i]-v[i+1])/2.0;
+        }
+    }
+	cout.setf(ios::fixed);
+    cout.precision(15);
+    cout << act << endl;
+}
