@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define INF 51
+#define INF 52
 #define MAX 500005
 
 struct aristas{
