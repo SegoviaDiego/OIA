@@ -15,11 +15,23 @@ bool Find(const int a){
     return false;
 }
 
+int calcular(const int a){
+    int res=0,nuevo;
+    for(int i=0;i<(lista[a].size()-n)+1;i++){
+        nuevo=0;
+        for(int j=0;j<n;j++){
+            nuevo+=lista[a][i+j];
+        }
+        res=max(res,nuevo);
+    }
+    return res;
+}
+
 bool res(vector< pair<int,int> > &top){
     bool rest;
-    for(int i=0;i<listadeventas.size();i++){
-        if(listadeventas[i].second.size()>=n){
-            top.push_back(make_pair(listadeventas[i].first,listadeventas[i].second[n-1]));
+    for(int i=0;i<lista.size();i++){
+        if(lista[i].size()>=n){
+            top.push_back(make_pair(i+1,calcular(i)));
             rest=true;
         }
     }
@@ -39,25 +51,10 @@ int main(){
         for(int j=0;j<a;j++){
             fin >> b;
             lista[i].push_back(b);
-            if(listadeventas[i].second.size()>0){
-                listadeventas[i].second.push_back(b+listadeventas[i].second[listadeventas[i].second.size()-1]);
-            } else {
-                listadeventas[i].first=i+1;
-                listadeventas[i].second.push_back(b);
-            }
         }
     }
 
     fin >> n;
-
-    for(int i=0;i<c;i++){
-        cout << listadeventas[i].first << ": ";
-        for(int j=0;j<listadeventas[i].second.size();j++){
-            cout << listadeventas[i].second[j] << ' ';
-        }
-        cout << endl;
-    }
-    cout << endl;
 
     bool done=false;
 
@@ -65,6 +62,7 @@ int main(){
         while(Find(n)){
             vector< pair<int,int> > top;
             if(res(top)){
+                sort(top.begin(),top.end(),metodo);
                 if(top.size() > 1){
                     sort(top.begin(),top.end(),metodo);
                     if(top[0].second != top[1].second){
