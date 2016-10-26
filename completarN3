@@ -1,0 +1,75 @@
+/*
+
+Nombre: Problema de las reinas de ajedrez
+Tiempo: 18:50
+Problema: Nivel 3 Problema 2 completar Certamen Nacional OIA 2013
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int n,m,l;
+vector< pair<int,int> > lista;
+vector< pair<int,int> > res;
+
+bool Findx(const int a){
+    for(int i=0;i<lista.size();i++){
+        if(lista[i].first == a){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Findy(const int a){
+    for(int i=0;i<lista.size();i++){
+        if(lista[i].second == a){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Finddiago(const int a,const int b){
+    for(int i=0;i<lista.size();i++){
+        if( abs(lista[i].first - a) == abs(lista[i].second - b) ){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool noconflict(const int a,const int b){
+    if(!Findx(a) && !Findy(b)){
+        if(!Finddiago(a,b)){
+            return true;
+        }
+    }
+    return false;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+    l=n-m;
+    int a,b;
+    while(fin >> a >> b){
+        lista.push_back(make_pair(a,b));
+    }
+
+    for(int k=0;k<l;k++){
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<n+1;j++){
+                if(noconflict(i,j)){
+                    lista.push_back(make_pair(i,j));
+                    res.push_back(make_pair(i,j));
+                }
+            }
+        }
+    }
+
+    for(int i=0;i<res.size();i++){
+        cout << res[i].first << ' ' << res[i].second << endl;
+    }
+}
