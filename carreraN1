@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    ifstream fin("in.txt");
+    int c,d,n,a,b,p,res=0;
+    fin >> c >> d >> n;
+    while(fin >> a >> b >> p){
+        if(p-(a+b)<=n && d>=abs(a-b)) res++;
+    }
+    cout << res;
+}
