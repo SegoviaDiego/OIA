@@ -1,0 +1,103 @@
+//46:04min
+#include <bits/stdc++.h>
+using namespace std;
+
+struct esquina{
+    int largo;
+    string camino;
+    pair<int,int> inicia;
+    pair<int,int> termina;
+    bool loaded;
+
+    esquina(){
+        loaded=false;
+        largo=0;
+        camino="";
+    }
+};
+
+int t;
+int m[3000][3000];
+int dir[2][4] = { {1,-1,0,0},{0,0,1,-1} };
+char dirN[4] = {'S','N','E','O'};
+vector< vector<esquina> > pista;
+
+bool isValid(int a){
+    if(a>=0 && a < t)
+        return true;
+    return false;
+}
+
+void loadedMap(int x,int y){
+    cout << "-------------" << x << '-' << y << endl;
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            if(i == x && j == y) cout << 'x' << ' ';
+            else cout << pista[i][j].loaded << ' ';
+        }
+        cout << endl;
+    }
+}
+
+esquina bestPath(int i,int j){
+    //loadedMap(i,j); // Activar para ver la evolución de la carga dinámica.
+    esquina res,temp;
+    int newJ,newI;
+    bool endOfPath=true;
+
+    for(int x=0;x<4;x++){
+        newI = i + dir[0][x];newJ = j+ dir[1][x];
+        if(isValid(newI) && isValid(newJ) && m[i][j] > m[newI][newJ]){
+            if(pista[newI][newJ].loaded){
+                temp = pista[newI][newJ];
+            } else {
+                temp = bestPath(newI,newJ);
+            }
+            temp.largo++;
+            if(temp.largo > res.largo){
+                res.largo = temp.largo;
+                res.camino = dirN[x] + temp.camino;
+                res.termina = temp.termina;
+                endOfPath=false;
+            }
+        }
+    }
+
+    if(endOfPath) res.termina = make_pair(i,j);
+    res.inicia = make_pair(i,j);
+
+    if(res.largo > pista[i][j].largo) pista[i][j] = res;
+    pista[i][j].loaded = true;
+
+    return res;
+}
+
+void escribir(esquina res){
+    cout << "El largo de la pista es " << res.largo << endl;
+    cout << "Inicio: (" << res.inicia.first+1 << ',' << res.inicia.second+1 <<") ";
+    cout << "Fin: (" << res.termina.first+1 << ',' << res.termina.second+1 <<") " << endl;
+    cout << res.camino << endl;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    esquina temp,res;
+    vector<esquina> vContainer;
+    fin >> t;
+    for(int i=0;i<t;i++){
+        pista.push_back(vContainer);
+        for(int j=0;j<t;j++){
+            fin >> m[i][j];
+            pista[i].push_back(temp);
+        }
+    }
+
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            temp = bestPath(i,j);
+            if(temp.largo > res.largo) res = temp;
+        }
+    }
+
+    escribir(res);
+}
