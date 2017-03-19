@@ -1,0 +1,50 @@
+//45:56min
+#include <bits/stdc++.h>
+using namespace std;
+
+int n;
+vector<int> keyV;
+string mensaje,key,res="";
+char abc[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+char encrypt(char a,int times){
+    if((int(a)-int('A'))+times > 25){
+        times = (int(a)-int('A'))+times;
+        times = abs(times-25)-1;
+        return char( int('A')+times );
+    } else {
+        return char( int(a)+times );
+    }
+}
+
+void generateKeyV(string key){
+    if(key.length() < n){
+        int a=key.length(),b=n;
+        for(int i=0;i<abs(a-b);i++){
+            keyV.push_back(0);
+        }
+    }
+    for(int i=0;i<key.length();i++){
+        keyV.push_back( int(key[i])-int('0') );
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> key;
+    generateKeyV(key);
+    getline(fin, mensaje); getline(fin, mensaje);
+    for(int i=0, x=0;i<mensaje.length();i++){
+        if(mensaje[i]!=' '){
+            res+=encrypt(mensaje[i],keyV[x]);
+            x++;
+            if(x==n) x=0;
+        }
+    }
+
+    if(res == "YPJEMQGSCDPGNDGNEGRVPADGRJNLB") cout << 1 << endl;
+    else cout << 2 << endl;
+
+    cout << res << endl;
+
+}
