@@ -1,0 +1,78 @@
+//1:46hs
+#include <bits/stdc++.h>
+using namespace std;
+int t;
+int m[3000][3000];
+int dir[2][4] = { {1,-1,0,0},{0,0,1,-1} };
+char dirN[4] = {'S','N','E','O'};
+
+struct esquina{
+    int largo;
+    pair<int,int> inicia;
+    pair<int,int> termina;
+    string camino;
+    bool loaded;
+
+    esquina(){
+        largo=0;
+        camino="";
+        loaded = false;
+    }
+};
+
+esquina bestPath(int i,int j){
+    int newI,newJ;
+    bool endOfPath=true;
+    esquina res,temp;
+
+    for(int x=0;x<4;x++){
+        newI = i + dir[0][x]; newJ = j + dir[1][x];
+        if(newI >= 0 && newJ >= 0 && newI < t && newJ < t && m[i][j] > m[newI][newJ]){
+            endOfPath=false;
+            temp = bestPath(newI,newJ);
+            temp.largo++;
+            if(temp.largo > res.largo){
+                res.largo = temp.largo;
+                res.termina = temp.termina;
+                res.camino=dirN[x] + temp.camino;
+            }
+        }
+    }
+
+    if(endOfPath){
+        res.termina = make_pair(i,j);
+    }
+
+    return res;
+}
+
+void escribir(esquina result){
+    cout << "El largo de la pista es " << result.largo << endl;
+    cout << "Inicio: (" << result.inicia.first+1 << "," << result.inicia.second+1;
+    cout << ") Fin: ("<< result.termina.first+1 << "," << result.termina.second+1;
+    cout << ")" << endl;
+    cout << result.camino << endl;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    int temp;
+    esquina s,res;
+    fin >> t;
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            fin >> m[i][j];
+        }
+    }
+
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            s = bestPath(i,j);
+            if(s.largo > res.largo){
+                res = s;
+                res.inicia = make_pair(i,j);
+            }
+        }
+    }
+    escribir(res);
+}
