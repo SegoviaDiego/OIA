@@ -1,0 +1,100 @@
+//26:22min
+#include <bits/stdc++.h>
+using namespace std;
+
+int t,inicios=0;
+int m[2000][2000];
+int dir[2][4] = { {1,-1,0,0},{0,0,1,-1} };
+// 1=S 2=N 3=E 4=O
+
+struct esquina{
+    int largo;
+    pair<int,int> inicia;
+    pair<int,int> curva;
+    pair<int,int> termina;
+
+    esquina(){
+        largo=0;
+    }
+};
+
+bool isValid(int a){
+    if(a>=0 && a<t) return true;
+    return false;
+}
+
+esquina bestPath(int i,int j,int direc,int giros){
+    int newI,newJ;
+    esquina res,temp;
+    bool endOfPath=true;
+    res.inicia = make_pair(i,j);
+
+    for(int x=0;x<4;x++){
+        newI = i+dir[0][x];newJ = j+dir[1][x];
+        if(isValid(newI) && isValid(newJ) && m[i][j] > m[newI][newJ]){
+            if(direc == 0 || direc==x+1){
+                endOfPath=false;
+                temp = bestPath(newI,newJ,x+1,giros);
+                temp.largo++;
+                if(temp.largo > res.largo){
+                    res.largo = temp.largo;
+                    res.termina = temp.termina;
+                    res.curva = temp.curva;
+                }
+            } else if(giros > 0){
+                endOfPath=false;
+                temp = bestPath(newI,newJ,x+1,giros-1);
+                temp.largo++;
+                if(temp.largo > res.largo){
+                    res.largo = temp.largo;
+                    res.termina = temp.termina;
+                    res.curva = make_pair(i,j);
+                }
+            }
+        }
+    }
+
+    if(endOfPath){
+        res.termina = make_pair(i,j);
+    }
+
+    return res;
+}
+
+void escribir(esquina res){
+    if(res.largo == 0)
+        cout << "Sin pista" << endl;
+    else {
+        cout << "El largo de la pista es " << res.largo << endl;
+        cout << "Hay "<< inicios << " inicios de pistas." << endl;
+        cout << "Inicio:("<<res.inicia.first+1<<","<<res.inicia.second+1<<")";
+        cout << " Curva:("<<res.curva.first+1<<","<<res.curva.second+1<<") ";
+        cout << "Fin:("<<res.termina.first+1<<","<<res.termina.second+1<<")"<< endl;
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    esquina res,temp;
+    fin >> t;
+
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            fin >> m[i][j];
+        }
+    }
+
+    for(int i=0;i<t;i++){
+        for(int j=0;j<t;j++){
+            temp = bestPath(i,j,0,1);
+            if(temp.largo == res.largo){
+                inicios++;
+            } else if(temp.largo > res.largo){
+                res = temp;
+                inicios = 1;
+            }
+        }
+    }
+
+    escribir(res);
+}
