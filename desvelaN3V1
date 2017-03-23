@@ -1,0 +1,61 @@
+//29:40 mins
+#include <bits/stdc++.h>
+using namespace std;
+
+string c="",p="ARJHNRIUCGQHPFGQFHTXPDEHTLNOC";
+
+bool validate(string str){
+    size_t found = str.find(c);
+    if(found!=string::npos) return true;
+    return false;
+}
+
+char getChar(char a,int steps){
+    if((int(a)-int('A'))-steps < 0){
+        a = char(int('Z')+((int(a)-int('A'))-steps)+1);
+    } else {
+        a = char(int(a)-steps);
+    }
+    return a;
+}
+
+string desvelar(string keys){
+    string res="";
+    int x=0,step=0;
+
+    for(int i=0;i<p.length();i++){
+        step = (int(keys[x])-int('A'));
+        res+=getChar(p[i],step);
+        x++;
+        if(x>=keys.length()) x=0;
+    }
+
+    return res;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    string res,temp,key="ab";
+    size_t found;
+    getline(fin,p);
+    getline(fin,temp);
+
+    for(int i=0;i<temp.length();i++){
+        if(temp[i] != '*' && temp[i] != ' '){
+            c+=temp[i];
+        }
+    }
+
+    for(int i=0;i<26;i++){
+        key[0] = char( int('A')+i );
+        for(int j=0;j<26;j++){
+            key[1] = char( int('A')+j );
+            res = desvelar(key);
+            found = res.find(c);
+            if(found!=string::npos) break;
+        }
+        if(found!=string::npos) break;
+    }
+    cout << "Con una muestra de largo " << temp.length()-1 << " el texto claro es:" << endl;
+    cout << res << endl;
+}
