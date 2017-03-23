@@ -1,0 +1,99 @@
+//36:48mins
+#include <bits/stdc++.h>
+using namespace std;
+
+int m,n,k;
+int mapa[1000][1000];
+vector< pair<int,int> > lomas;
+
+
+
+bool isLoma(int x,int y){
+    int newX,newY;
+    //arriba y abajo
+    for(int i=1;i<=k;i++){
+        newX = x-i;
+        if(mapa[newX+i][y] < mapa[newX][y]) return false;
+        newX = x+i;
+        if(mapa[newX-i][y] < mapa[newX][y]) return false;
+    }
+    //izq y derecha
+    for(int i=1;i<=k;i++){
+        newY = y-i;
+        if(mapa[x][newY+i] < mapa[x][newY]) return false;
+        newY = y+i;
+        if(mapa[x][newY-i] < mapa[x][newY]) return false;
+    }
+
+    //superior izq
+    for(int i=1;i<=k;i++){
+        newX = x-i;
+        for(int j=1;j<=k;j++){
+            newY = y-j;
+            if(mapa[newX][newY] > mapa[newX+i][newY] ||
+               mapa[newX][newY] > mapa[newX][newY+j] ) return false;
+        }
+    }
+    //superior der
+    for(int i=1;i<=k;i++){
+        newX = x+i;
+        for(int j=1;j<=k;j++){
+            newY = y-j;
+            if(mapa[newX][newY] > mapa[newX-i][newY] ||
+               mapa[newX][newY] > mapa[newX][newY+j] ) return false;
+        }
+    }
+    //inferior izq
+    for(int i=1;i<=k;i++){
+        newX = x-i;
+        for(int j=1;j<=k;j++){
+            newY = y+j;
+            if(mapa[newX][newY] > mapa[newX+i][newY] ||
+               mapa[newX][newY] > mapa[newX][newY-j] ) return false;
+        }
+    }
+    //superior izq
+    for(int i=1;i<=k;i++){
+        newX = x+i;
+        for(int j=1;j<=k;j++){
+            newY = y+j;
+            if(mapa[newX][newY] > mapa[newX-i][newY] ||
+               mapa[newX][newY] > mapa[newX][newY-j] ) return false;
+        }
+    }
+
+    return true;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> m >> n >> k;
+
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            fin >> mapa[i][j];
+        }
+    }
+
+    for(int i=k;i<m-k;i++){
+        for(int j=k;j<n-k;j++){
+            if(isLoma(i,j)){
+                lomas.push_back(make_pair(i,j));
+            }
+        }
+    }
+
+    cout << "En un terreno de " << m <<" por " << n;
+    cout << " se localizaron "<< lomas.size();
+    cout << " lomas de grado "<< k <<"." << endl;
+
+    cout << "fil :";
+    for(int i=0;i<lomas.size();i++){
+        cout << lomas[i].first+1 << ' ';
+    }
+    cout << endl << "col :";
+    for(int i=0;i<lomas.size();i++){
+        cout << lomas[i].second+1 << ' ';
+    }
+
+}
