@@ -1,0 +1,16 @@
+//4:07mins
+#include <bits/stdc++.h>
+using namespace std;
+
+int c,d,h,a,b,res=0;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> d >> d >> h;
+    while(fin >> a >> b >> c){
+        if(abs(a-b) <= b && (c-(a+b)) <= h){
+            res++;
+        }
+    }
+    cout << res << endl;
+}
