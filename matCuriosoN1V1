@@ -1,0 +1,23 @@
+//12:23mins
+#include <bits/stdc++.h>
+using namespace std;
+
+
+bool isPair(int n){
+    if((n%2)==0) return true;
+    return false;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    int input,maxim=0,length=0;
+    fin >> input;
+    while(input > 1){
+        length++;
+        if(isPair(input)) input = input/2;
+        else input = (input*3)+1;
+        maxim=max(input,maxim);
+
+    }
+    cout << length+1 << endl << maxim << endl;
+}
