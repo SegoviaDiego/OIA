@@ -1,0 +1,41 @@
+//10:48mins
+#include <bits/stdc++.h>
+using namespace std;
+
+int c,p1=0,p2=0,e1,e2;
+vector<char> cancion;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> c;
+    e1=c+1;e2=c+1;
+
+    char input;
+
+    for(int i=0;i<c;i++){
+        fin >> input;
+        cancion.push_back(input);
+    }
+
+    for(int i=0;i<c;i++){
+        fin >> input;
+        if(input == cancion[i]){
+            p1++;
+        } else if(e1==c+1) e1=i+1;
+    }
+
+    for(int i=0;i<c;i++){
+        fin >> input;
+        if(input == cancion[i]){
+            p2++;
+        } else if(e2==c+1) e2=i+1;
+    }
+
+    if(e2==e1){
+        cout << 0 << ' ' << p1 << ' ' << e1 << endl;
+    } else if(e2>e1){
+        cout << 2 << ' ' << p2 << ' ' << e2 << endl;
+    } else {
+        cout << 1 << ' ' << p1 << ' ' << e1 << endl;
+    }
+}
