@@ -1,0 +1,70 @@
+//16:14mins
+#include <bits/stdc++.h>
+using namespace std;
+
+int m,input,larg=0;
+vector<int> pista;
+vector<pair<int,pair<int,int> > > res;
+
+pair<int,pair<int,int> > getBestPath(int x){
+    pair<int,pair<int,int> > temp;
+    temp.first = 0;
+    temp.second.first = x;
+    while(x+1 < m){
+        if(pista[x+1] < pista[x]){
+            temp.first++;
+        } else break;
+        x++;
+    }
+    temp.second.second = x;
+    return temp;
+}
+
+pair<int,pair<int,int> > getBestPath2(int x){
+    pair<int,pair<int,int> > temp;
+    temp.first = 0;
+    temp.second.first = x;
+    while(x-1 > 0){
+        if(pista[x-1] < pista[x]){
+            temp.first++;
+        } else break;
+        x--;
+    }
+    temp.second.second = x;
+    return temp;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> m;
+
+    for(int i=0;i<m;i++){
+        fin >> input;
+        pista.push_back(input);
+    }
+
+    pair<int,pair<int,int> > temp;
+
+    for(int i=0;i<m;i++){
+        temp = getBestPath(i);
+        if(temp.first > larg){
+            larg = temp.first;
+            res.clear();
+            res.push_back(temp);
+        } else if(temp.first == larg){
+            res.push_back(temp);
+        }
+        temp = getBestPath2(i);
+        if(temp.first > larg){
+            larg = temp.first;
+            res.clear();
+            res.push_back(temp);
+        } else if(temp.first == larg){
+            res.push_back(temp);
+        }
+    }
+    cout << res.size() << ' ' << res[0].first << endl;
+    for(int i=0;i<res.size();i++){
+        cout << res[i].second.first+1 << ' ' << res[i].second.second+1 << endl;
+    }
+}
