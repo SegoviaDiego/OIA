@@ -1,3 +1,14 @@
+//Input
+//5 1 4
+//1 2 7
+//1 4 2
+//2 4 2
+//2 3 1
+//3 5 5
+//4 2 3
+//4 3 8
+//4 5 5
+//5 3 4
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -63,13 +74,12 @@ void escribir(const int a){
 
 int main(){
     ifstream fin("in.txt");
-    fin >> n >> m >> o >> d;
+    fin >> n >> o >> d;
 
     int a,b,c;
     init();
 
-    for(int i=0;i<m;i++){
-        fin >> a >> b >> c;
+    while(fin >> a >> b >> c){
         lista[a].push_back(make_pair(b,c));
     }
 
