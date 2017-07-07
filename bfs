@@ -1,0 +1,62 @@
+//----Input----
+//9 8 1 1
+//........
+//.#######
+//.#......
+//.#......
+//.#.S...S
+//.###.#.#
+//.#...#.#
+//.#.###.#
+//........
+
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX 1000
+int n,m,x,y;
+char ady[MAX][MAX];
+bool visitado[MAX][MAX];
+int dir[2][4] = { {1,-1,0,0},
+                  {0,0,-1,1} };
+queue< pair<int,int> > Q;
+
+void bfs(){
+    Q.push(make_pair(x,y));
+    pair<int,int> act, sig;
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(ady[act.first][act.second] == 'S'){
+            cout << act.first << ' ' << act.second << endl;
+            return;
+        };
+
+        if(visitado[act.first][act.second]) continue;
+        visitado[act.first][act.second] = true;
+
+        for(int i=0;i<4;i++){
+            sig.first = act.first + dir[0][i];
+            sig.second = act.second + dir[1][i];
+            if( (sig.first > 0 && sig.first <= n) && (sig.second > 0 && sig.second <= m) ){
+                if(ady[sig.first][sig.second] != '#'){
+                   Q.push(sig);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> x >> y;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            fin >> ady[i][j];
+            visitado[i][j]=false;
+        }
+    }
+
+    bfs();
+}
