@@ -1,0 +1,42 @@
+//--INPUT--
+//100
+//4 12
+//2 1
+//2 2
+//1 1
+//10 4
+//100 100
+
+#include <bits/stdc++.h>
+using namespace std;
+int t;
+vector< pair<int,int> > lista;
+
+pair<int,int> getMax(pair<int,int> a, pair<int,int> b){
+    if(a.first == b.first)
+        if(a.second < b.first)
+            return a;
+        else
+            return b;
+    else if(a.first > b.first)
+        return a;
+    return b;
+}
+
+pair<int,int> backtracking(pair<int, int> a, int index){
+    if(a.second > t) return make_pair(0,0);
+    if(index >= lista.size() || a.second == t) return a;
+    return getMax(backtracking(make_pair(a.first+lista[index].first,a.second+lista[index].second),
+                               index+1), backtracking(a,index+1));
+}
+
+int main(){
+    ifstream fin("in.txt");
+    int a,b;
+    fin >> t;
+    while(fin >> a >> b){
+        lista.push_back(make_pair(a,b));
+    }
+    pair<int,int> res = backtracking(make_pair(0,0),0);
+    cout << res.first << ' ' << res.second << endl;
+}
