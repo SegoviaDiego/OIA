@@ -1,0 +1,43 @@
+//Timing: 21:20
+#include <bits/stdc++.h>
+#define INF 1<<30
+using namespace std;
+vector<int> numeros;
+vector<pair<int,int> > result;
+
+struct cmp{
+    bool operator()(const pair<int,int> a, const pair<int,int> b){
+        if(a.second == b.second){
+            return a.first < b.first;
+        } else {
+            return a.second > b.second;
+        }
+    }
+};
+
+pair<int,int> nv(int a){
+    int resv=0;
+    if(a%2==0) resv+=2;
+    if(a%3==0) resv+=1;
+    return make_pair(a,resv);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    int a, res;
+    while(fin >> a){
+        numeros.push_back(a);
+    }
+
+    res = numeros[numeros.size()-1];
+    numeros.pop_back();
+
+    for(int i=0;i<numeros.size();i++){
+        result.push_back(nv(numeros[i]));
+    }
+
+    sort(result.begin(), result.end(), cmp());
+
+    cout << result[res-1].first << endl;
+
+}
