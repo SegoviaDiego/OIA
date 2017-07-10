@@ -1,0 +1,26 @@
+//timing: 04:49
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> lista;
+
+int main(){
+    ifstream fin("in.txt");
+
+    int a;
+
+    while(fin >> a){
+        lista.push_back(a);
+    }
+
+    lista.pop_back();
+
+    int ant=lista[0], act=0, res=0;
+
+    for(int i=1;i<lista.size();i++){
+        res+= abs(ant-lista[i]);
+        ant = lista[i];
+    }
+
+    cout << res << endl;
+}
