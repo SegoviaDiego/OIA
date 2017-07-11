@@ -1,0 +1,18 @@
+//timing: 7:17
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,temp=1<<30,res=0;
+vector<int> lista;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+    while(fin >> a) lista.push_back(a);
+    for(int i=1;i<n-1;i++){
+        if( abs(lista[i-1] - lista[i+1]) < temp){
+            res=i+1;
+            temp = abs(lista[i-1] - lista[i+1]);
+        }
+    }
+    cout << res << endl;
+}
