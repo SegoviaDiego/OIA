@@ -1,0 +1,29 @@
+//timing: 16:28
+#include <bits/stdc++.h>
+using namespace std;
+int keys=0;
+string key,temp;
+vector< string > lista;
+
+void deco(string a){
+    string temp = a;
+    temp[0] = a[2];
+    temp[1] = a[3];
+    temp[2] = a[1];
+    temp[3] = a[4];
+    temp[4] = a[0];
+    temp[5] = a[5];
+    lista.push_back(temp);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> key;
+    while(key.size() >= 6){
+        temp = key.substr(key.size()/2 -3, 6);
+        deco(temp);
+        key = key.substr(0, key.size()/2 -3) + key.substr(key.size()/2 +3);
+    }
+    cout << lista.size() << endl;
+    for(int i=0;i<lista.size();i++) cout << lista[i] << endl;
+}
