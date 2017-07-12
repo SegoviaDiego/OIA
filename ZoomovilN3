@@ -1,0 +1,34 @@
+//timing 26:44
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> lista;
+string a;
+int ag,b,c;
+int main(){
+    ifstream fin("in.txt");
+    fin >> ag >> ag;
+    while(fin >> a >> b >> c){
+        for(int i=0;i<c;i++){
+            lista.push_back(b);
+        }
+    }
+
+    sort(lista.rbegin(),lista.rend());
+
+    int agl=0, v=0, agt=0, ant;
+
+    for(int i=1;i<lista.size();i++){
+        if( agl + abs(lista[i]-lista[i-1]) < ag){
+            agl+=abs(lista[i]-lista[i-1]);
+        } else {
+            v++;
+            agt+=agl;
+            agl=0;
+        }
+    }
+
+    agt+=agl;
+    v++;
+
+    cout << v << ' ' << agt << endl;
+}
