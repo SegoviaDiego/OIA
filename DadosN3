@@ -1,0 +1,28 @@
+//timing 24:26
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,x=0,y=0;
+vector<int> lista;
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> a) lista.push_back(a);
+
+    sort(lista.rbegin(),lista.rend());
+
+    int sz=0,temp=0;
+    for(int i=0;i<lista.size();i++){
+        if(sz == 0 || sz < lista[i]*lista[i]){
+            y+=temp;
+            temp=0;
+            x+=lista[i];
+            sz = lista[i]*lista[i];
+        } else{
+            temp=max(lista[i], temp);
+            sz-=lista[i]*lista[i];
+        }
+    }
+
+    cout << max(x,y) << endl;
+}
