@@ -1,0 +1,26 @@
+//timing: 14:57
+#include <bits/stdc++.h>
+using namespace std;
+int a, loop=0, temp=0, v=0;
+
+bool isValid(int a){
+    if(a%2 == 0 || a%3 == 0 || a%5 == 0)
+        return false;
+    return true;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> a;
+    while(fin >> a){
+        if(isValid(a)){
+            temp++;
+            v++;
+        } else {
+            loop=max(loop, temp);
+            temp=0;
+        }
+    }
+
+    cout << v << endl << loop << endl;
+}
