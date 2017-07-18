@@ -1,0 +1,60 @@
+//TEST INPUT
+//9
+//0 0
+//1 0
+//2 0
+//3 1
+//4 5
+//5 5
+//6 4
+//7 0
+//8 4
+
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int m[MAX], vertices[MAX];
+int n, a, b;
+
+int Find(int a){
+    if(m[a] == a) return a;
+    return Find(m[a]);
+}
+
+int RoadReductionFind(int a){
+    if(m[a] == a) return a;
+    return m[a] = Find(m[a]);
+}
+
+int CountTrees(){
+    int res=0;
+    for(int i=0;i<n;i++)
+        if(m[i]==i) res++;
+    return res;
+}
+
+int CountVertices(){
+    for(int i=0;i<n;i++)
+        vertices[Find(i)]++;
+}
+
+bool sameComponent(int x, int y){
+    if( Find(x) == Find(y) ) return true;
+    return false;
+}
+
+void Union(int x, int y){
+    m[Find(x)] = Find(y);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+    for(int i=0;i<n;i++){
+        m[i]=i;
+        vertices[i]=0;
+    };
+    while(fin >> a >> b) m[a] = b;
+
+    for(int i=0;i<n;i++) cout << Find(i) << endl;
+}
