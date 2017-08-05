@@ -1,0 +1,58 @@
+//Timing: 29:07
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+struct cmp{
+    operator()(pair<pair<int,int>, int> a, pair<pair<int,int>, int> b ){
+        return a.second > b.second;
+    }
+};
+int uf[MAX];
+vector< pair<pair<int,int>, int> > lista;
+priority_queue<pair<pair<int,int>, int>, vector< pair<pair<int,int>, int> >, cmp > Q;
+int n,inp;
+
+int Find(int a){
+    if(uf[a] == a)
+        return a;
+    return uf[a] = Find(uf[a]);
+}
+
+bool sc(int a, int b){
+    return Find(a) == Find(b);
+}
+
+void Union(int a, int b){
+    uf[Find(a)]=Find(b);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+    pair<pair<int,int>, int> a,b;
+    int p=0;
+
+    for(int i=1;i<=n;i++){
+        uf[i]=i;
+        for(int j=1;j<=n;j++){
+            fin >> inp;
+            if(inp != 0)
+                Q.push(make_pair(make_pair(i,j), inp));
+        }
+    }
+
+    while(!Q.empty()){
+        a = Q.top();
+        Q.pop();
+
+        if(!sc(a.first.first, a.first.second)){
+            Union(a.first.first, a.first.second);
+            lista.push_back(make_pair(make_pair(a.first.first, a.first.second), a.second));
+            p++;
+        }
+    }
+
+    cout << p << endl;
+    for(int i=0;i<lista.size();i++)
+        cout << lista[i].first.first << ' ' << lista[i].first.second << ' ' << lista[i].second << endl;
+}
