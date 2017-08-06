@@ -1,0 +1,54 @@
+//Timing: 7:23
+#include <bits/stdc++.h>
+using namespace std;
+struct cmp{
+    operator()(pair<pair<int,int>, int> a, pair<pair<int,int>, int> b){
+        return a.second > b.second;
+    }
+};
+vector< pair<pair<int,int>, int> > lista, res;
+int uf[10000];
+
+int Find(int a){
+    if(uf[a] == a)
+        return a;
+    return uf[a] = Find(uf[a]);
+}
+
+void Union(int a, int b){
+    uf[Find(a)]=Find(b);
+}
+
+bool sc(int a, int b){
+    return Find(a) == Find(b);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    int n;
+    fin >> n;
+    int a;
+    for(int i=1;i<=n;i++){
+        uf[i]=i;
+        for(int j=1;j<=n;j++){
+            fin >> a;
+            if(i != j)
+                lista.push_back(make_pair(make_pair(i,j), a));
+        }
+    }
+
+    sort(lista.rbegin(),lista.rend(),cmp());
+
+    for(int i=0;i<lista.size();i++){
+        if(!sc(lista[i].first.first, lista[i].first.second)){
+            Union(lista[i].first.first, lista[i].first.second);
+            res.push_back(make_pair(make_pair(lista[i].first.first, lista[i].first.second), lista[i].second));
+        }
+    }
+
+    cout << res.size() << endl;
+
+    for(int i=0;i<res.size();i++){
+        cout << res[i].first.first << ' ' << res[i].first.second << ' ' << res[i].second << endl;
+    }
+}
