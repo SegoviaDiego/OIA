@@ -1,77 +1,71 @@
-INPUT
-4
-1 2 5
-1 3 5
-1 4 5
-1 5 5
-1
-2 3 2
-6
-1 2 5
-1 3 5
-1 4 5
-1 5 5
-3 4 8
-4 5 8
+//Timing: 7:20
+9
+1 8 9
+1 2 4
+2 8 11
+8 9 7
+8 7 1
+9 7 6
+2 3 9
+9 3 2
+3 6 4
+7 6 2
+3 4 7
+4 6 15
+4 5 10
+6 5 11
 
 #include <bits/stdc++.h>
 #define MAX 10000
 using namespace std;
-
 struct cmp{
-    operator()(pair<pair<int,int>,int> a, pair<pair<int,int>,int> b){
-        return a.second < b.second;
+    operator()(pair<pair<int,int>, int> a, pair<pair<int,int>, int> b){
+        return a.second > b.second;
     }
 };
-
-int n,a,b,c,original=0,peso=0,UnionFind[MAX];
-vector< pair<pair<int,int>,int> > lista;
+vector< pair<pair<int,int>, int> > lista;
+int uf[MAX];
+int res=0, n;
 
 int Find(int a){
-    if(UnionFind[a] == a) return a;
-    return UnionFind[a] = Find(UnionFind[a]);
+    if(uf[a] == a)
+        return a;
+    return uf[a] = Find(uf[a]);
 }
 
-bool SameComponent(int a, int b){
+void Union(int a,int b){
+    uf[Find(a)]=Find(b);
+}
+
+bool sc(int a, int b){
     return Find(a) == Find(b);
 }
 
-void Union(int a, int b){
-    UnionFind[Find(a)]=Find(b);
+void init(){
+    for(int i=1;i<=n;i++){
+        uf[i]=i;
+    }
 }
 
 int main(){
     ifstream fin("in.txt");
     fin >> n;
-    for(int i=0;i<n;i++){
-        fin >> a >> b >> c;
-        original+=c;
-    }
-    cout << original << endl;
+    init();
 
-    fin >> n;
-    for(int i=0;i<n;i++){
-        fin >> a >> b >> c;
-        lista.push_back(make_pair(make_pair(a,b),c));
-        UnionFind[a]=a;
-        UnionFind[b]=b;
-    }
-    fin >> n;
-    for(int i=0;i<n;i++){
-        fin >> a >> b >> c;
-        lista.push_back(make_pair(make_pair(a,b),c));
-        UnionFind[a]=a;
-        UnionFind[b]=b;
-    }
+    int a,b,c;
 
-    sort(lista.begin(),lista.end(),cmp());
+    while(fin >> a >> b >> c)
+        lista.push_back(make_pair(make_pair(a,b), c));
+
+
+    sort(lista.rbegin(),lista.rend(),cmp());
 
     for(int i=0;i<lista.size();i++){
-        if(!SameComponent(lista[i].first.first, lista[i].first.second)){
-            peso+=lista[i].second;
-            Union(lista[i].first.first, lista[i].first.second);
+        if(!sc(lista[i].first.first, lista[i].first.second)){
+            Union(lista[i].first.first,lista[i].first.second);
+            res+= lista[i].second;
         }
     }
 
-    cout << peso << endl;
+    cout << res << endl;
 }
