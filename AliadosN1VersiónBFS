@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int d1[MAX], d2[MAX];
+bool v1[MAX], v2[MAX];
+int n,m,x,y,a,b,c;
+vector< vector< pair<int,int> > > lista(MAX);
+queue< int > Q;
+
+void init(){
+    for(int i=1;i<=n;i++){
+        v1[i]=false;
+        v2[i]=false;
+        d1[i]=0;
+        d2[i]=0;
+    }
+}
+
+void bfs1(){
+    int act,ady,peso;
+    Q.push(x);
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(v1[act]) continue;
+        v1[act] = true;
+
+        for(int i=0;i<lista[act].size();i++){
+            ady = lista[act][i].first;
+            peso = lista[act][i].second;
+            if(!v1[ady] && d1[ady] == 0){
+                d1[ady]=d1[act]+peso;
+                Q.push(ady);
+            }
+        }
+    }
+}
+
+void bfs2(){
+    int act,ady,peso;
+    Q.push(y);
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(v2[act]) continue;
+        v2[act] = true;
+
+        for(int i=0;i<lista[act].size();i++){
+            ady = lista[act][i].first;
+            peso = lista[act][i].second;
+            if(!v2[ady] && d2[ady] == 0){
+                d2[ady]=d2[act]+peso;
+                Q.push(ady);
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> x >> y;
+
+    init();
+
+    while(fin >> a >> b >> c){
+        lista[a].push_back(make_pair(b,c));
+        lista[b].push_back(make_pair(a,c));
+    }
+
+    bfs1();
+    bfs2();
+
+    int xr=0, yr=0;
+
+    for(int i=1;i<=n;i++){
+        if(i != x && i != y){
+            if(d1[i] > d2[i])
+                xr++;
+            else if(d2[i] > d1[i])
+                yr++;
+        }
+    }
+
+    cout << xr << ' ' << yr << endl;
+}
