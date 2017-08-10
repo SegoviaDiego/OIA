@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+#define MAX 101
+using namespace std;
+struct cmp{
+    operator()(pair< pair<int,int> , pair<int,int> > a, pair< pair<int,int> , pair<int,int> > b){
+        return a.second.first > b.second.first;
+    }
+};
+int n, m[MAX][MAX][MAX];
+vector< pair< pair<int,int> , pair<int,int> > > lista;
+
+void init(){
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            for(int k=1;k<=n;k++){
+                m[i][j][k] = 0;
+            }
+        }
+    }
+}
+
+int toInt(char a){
+    return int(a) - int('0');
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    init();
+
+    string t;
+    getline(fin, t);
+    getline(fin, t);
+
+    int test=0;
+
+    while(getline(fin, t)){
+        if(t.size() > 10){
+            if(t[4] == t[20]){
+                lista.push_back(make_pair(make_pair(toInt(t[0]), toInt(t[2])), make_pair(toInt(t[4]), 1)));
+                //cout << lista.size() << ' ' << test << endl;
+                lista.push_back(make_pair(make_pair(toInt(t[8]), toInt(t[10])), make_pair(toInt(t[12]), 1)));
+                //cout << lista.size() << ' ' << test << endl;
+                lista.push_back(make_pair(make_pair(toInt(t[16]), toInt(t[18])), make_pair(toInt(t[20]), 1)));
+                //cout << lista.size() << ' ' << test << endl;
+                m[toInt(t[0])][toInt(t[2])][toInt(t[4])] = 1;
+                m[toInt(t[8])][toInt(t[10])][toInt(t[12])] = 1;
+                m[toInt(t[16])][toInt(t[18])][toInt(t[20])] = 1;
+            } else {
+                lista.push_back(make_pair(make_pair(toInt(t[0]), toInt(t[2])), make_pair(toInt(t[4]), 2)));
+                //cout << lista.size() << ' ' << test << endl;
+                lista.push_back(make_pair(make_pair(toInt(t[8]), toInt(t[10])), make_pair(toInt(t[12]), 2)));
+                //cout << lista.size() << ' ' << test << endl;
+                lista.push_back(make_pair(make_pair(toInt(t[16]), toInt(t[18])), make_pair(toInt(t[20]), 2)));
+                //cout << lista.size() << ' ' << test << endl;
+                m[toInt(t[0])][toInt(t[2])][toInt(t[4])] = 2;
+                m[toInt(t[8])][toInt(t[10])][toInt(t[12])] = 3;
+                m[toInt(t[16])][toInt(t[18])][toInt(t[20])] = 2;
+            }
+        } else {
+            lista.push_back(make_pair(make_pair(toInt(t[0]), toInt(t[2])), make_pair(toInt(t[4]), 1)));
+            //cout << lista.size() << ' ' << test << endl;
+            m[toInt(t[0])][toInt(t[2])][toInt(t[4])] = 1;
+        }
+        test++;
+    }
+
+    sort(lista.rbegin(),lista.rend(),cmp());
+
+    int x,y,z;
+    bool res=true;
+
+    for(int i=0;i<lista.size();i++){
+        x = lista[i].first.second;
+        y = lista[i].first.second;
+        z = lista[i].second.first;
+        cout << x << ' ' << y << ' ' << z << ' ' << i << endl;
+        if(lista[i].second.first > 1 && lista[i].second.second != 3 && m[x][y][z] != 0){
+            if(m[x][y][z-1] == 0){
+                //cout << "inestable " << x << ' ' << y << ' ' << z << endl;
+                res=false;
+                if(lista[i].second.second == 2){
+                    if(m[x-2][y][z] == 2)
+                        m[x-2][y][z] = 3;
+                    else if(m[x+2][y][z] == 2)
+                        m[x+2][y][z] = 3;
+                    else if(m[x][y-2][z] == 2)
+                        m[x][y-2][z] = 3;
+                    else if(m[x][y+2][z] == 2)
+                        m[x][y+2][z] = 3;
+                }
+            }
+        }
+    }
+
+    if(res)
+        cout << "estable " << lista[lista.size()-1].second.first << endl;
+}
