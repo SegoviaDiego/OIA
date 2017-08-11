@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+struct cmp{
+    operator()(pair< pair<int,int>, pair<int,int> > a, pair< pair<int,int>, pair<int,int> > b){
+        return a.second.second > b.second.second;
+    }
+};
+int m[MAX][MAX],x,y,o,p,n;
+bool v[MAX][MAX];
+priority_queue< pair< pair<int,int>, pair<int,int> >, vector< pair< pair<int,int>, pair<int,int> > >, cmp > Q;
+int dir[2][4] = { {1,-1,1,-1},{1,-1,-1,1} };
+int bestPath=-1;
+
+void setBestPath(pair< pair<int,int>, pair<int,int> > a){
+    if(bestPath == -1)
+        bestPath = a.second.second;
+    else
+        bestPath = min(a.second.second, bestPath);
+}
+
+void bfs(){
+    pair< pair<int,int>, pair<int,int> > act,sig;
+    int peso;
+    Q.push(make_pair(make_pair(x,y),make_pair(-1,0)));
+    while(!Q.empty()){
+        act = Q.top();
+        Q.pop();
+
+        if(v[act.first.first][act.first.second]) continue;
+        v[act.first.first][act.first.second] = true;
+
+        if(act.first.first == o && act.first.second == p)
+            setBestPath(act);
+
+        for(int i=0;i<4;i++){
+            sig = act;
+            if(act.second.first != i){
+                sig.second.first = i;
+                sig.second.second++;
+            }
+            sig.first.first = act.first.first + dir[0][i];
+            sig.first.second = act.first.second + dir[1][i];
+
+            if( (sig.first.first > 0 && sig.first.first <= n) )
+                if( ((sig.first.second > 0 && sig.first.second <= n)) )
+                    if(!v[sig.first.first][sig.first.second])
+                        if(m[sig.first.first][sig.first.second] != 1)
+                            Q.push(sig);
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            fin >> m[i][j];
+            v[i][j]=false;
+        }
+    }
+
+    fin >> x >> y >> o >> p;
+
+    bfs();
+
+    if(bestPath != -1)
+        cout << "SI" << endl << bestPath << endl;
+    else
+        cout << "NO" << endl;
+
+}
