@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+#define MAX 10000
+#define INF -1
+using namespace std;
+int n,m,x,y,a,b,c;
+int d1[MAX], d2[MAX];
+bool v1[MAX], v2[MAX];
+vector< vector< pair<int,int> > > lista(MAX);
+queue< pair<int,int> > Q;
+
+void init(){
+    for(int i=1;i<=n;i++){
+        v1[i]=false;
+        v2[i]=false;
+        d1[i]=INF;
+        d2[i]=INF;
+    }
+}
+
+void r1(int act, int ady, int peso){
+    if(peso + d1[act] > d1[ady]){
+        d1[ady] = peso + d1[act];
+        Q.push(make_pair(ady, d1[ady]));
+    }
+}
+
+void dij1(){
+    int act,ady,peso;
+    d1[x]=0;
+    Q.push(make_pair(x,0));
+    while(!Q.empty()){
+        act = Q.front().first;
+        Q.pop();
+
+        if(v1[act]) continue;
+        v1[act] = true;
+
+        for(int i=0;i<lista[act].size();i++){
+            ady = lista[act][i].first;
+            peso = lista[act][i].second;
+            if(!v1[ady])
+                r1(act,ady,peso);
+        }
+    }
+}
+
+void r2(int act, int ady, int peso){
+    if(peso + d2[act] > d2[ady]){
+        d2[ady] = peso + d2[act];
+        Q.push(make_pair(ady, d2[ady]));
+    }
+}
+
+void dij2(){
+    int act,ady,peso;
+    d2[y]=0;
+    Q.push(make_pair(y,0));
+    while(!Q.empty()){
+        act = Q.front().first;
+        Q.pop();
+
+        if(v2[act]) continue;
+        v2[act] = true;
+
+        for(int i=0;i<lista[act].size();i++){
+            ady = lista[act][i].first;
+            peso = lista[act][i].second;
+            if(!v2[ady])
+                r2(act,ady,peso);
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> x >> y;
+
+    while(fin >> a >> b >> c){
+        lista[a].push_back(make_pair(b,c));
+        lista[b].push_back(make_pair(a,c));
+    }
+
+    init();
+
+    dij1();
+
+    dij2();
+
+    int xr=0,yr=0;
+
+    for(int i=1;i<=n;i++){
+        if(i != x && i != y){
+            if(d1[i] > d2[i])
+                xr++;
+            else if(d2[i] > d1[i])
+                yr++;
+        }
+    }
+
+    cout << xr << ' ' << yr << endl;
+}
