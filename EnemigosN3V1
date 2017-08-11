@@ -1,0 +1,183 @@
+//Timing: 28:54
+#include <bits/stdc++.h>
+#define MAX 1000
+#define INF -1
+using namespace std;
+struct cmp{
+    operator()(pair<int,int> a, pair<int,int> b){
+        return a.second < b.second;
+    }
+};
+priority_queue< pair<int,int> , vector < pair<int,int> > , cmp > Q;
+vector< vector< pair<int,int> > > la(MAX), lp(MAX);
+bool va1[MAX], vp1[MAX];
+int a1[MAX], p1[MAX];
+bool va2[MAX], vp2[MAX];
+int a2[MAX], p2[MAX];
+int n,m,p,x,y,a,b,c;
+
+void dij1(){
+    int act,ady,peso;
+    Q.push(make_pair(x,0));
+    while(!Q.empty()){
+        act = Q.top().first;
+        Q.pop();
+
+        if(va1[act]) continue;
+        va1[act]=true;
+
+        for(int i=0;i<la[act].size();i++){
+            ady = la[act][i].first;
+            peso = la[act][i].second;
+            if(!va1[ady]){
+                if(peso + a1[act] > a1[ady]){
+                    a1[ady] = peso + a1[act];
+                    Q.push(make_pair(ady, a1[ady]));
+                }
+            }
+        }
+    }
+
+    Q.push(make_pair(x,0));
+    while(!Q.empty()){
+        act = Q.top().first;
+        Q.pop();
+
+        if(vp1[act]) continue;
+        vp1[act]=true;
+
+        for(int i=0;i<lp[act].size();i++){
+            ady = lp[act][i].first;
+            peso = lp[act][i].second;
+            if(!vp1[ady]){
+                if(peso + p1[act] > p1[ady]){
+                    p1[ady] = peso + p1[act];
+                    Q.push(make_pair(ady, p1[ady]));
+                }
+            }
+        }
+    }
+}
+
+void dij2(){
+    int act,ady,peso;
+    Q.push(make_pair(y,0));
+    while(!Q.empty()){
+        act = Q.top().first;
+        Q.pop();
+
+        if(va2[act]) continue;
+        va2[act]=true;
+
+        for(int i=0;i<la[act].size();i++){
+            ady = la[act][i].first;
+            peso = la[act][i].second;
+            if(!va2[ady]){
+                if(peso + a2[act] > a2[ady]){
+                    a2[ady] = peso + a2[act];
+                    Q.push(make_pair(ady, a2[ady]));
+                }
+            }
+        }
+    }
+
+    Q.push(make_pair(y,0));
+    while(!Q.empty()){
+        act = Q.top().first;
+        Q.pop();
+
+        if(vp2[act]) continue;
+        vp2[act]=true;
+
+        for(int i=0;i<lp[act].size();i++){
+            ady = lp[act][i].first;
+            peso = lp[act][i].second;
+            if(!vp2[ady]){
+                if(peso + p2[act] > p2[ady]){
+                    p2[ady] = peso + p2[act];
+                    Q.push(make_pair(ady, p2[ady]));
+                }
+            }
+        }
+    }
+}
+
+void init(){
+    for(int i=1;i<=n;i++){
+        va1[i]=false;
+        vp1[i]=false;
+        a1[i]=INF;
+        p1[i]=INF;
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> p >> x >> y;
+
+    for(int i=0;i<m;i++){
+        fin >> a >> b >> c;
+        la[a].push_back(make_pair(b,c));
+        la[b].push_back(make_pair(a,c));
+    }
+
+    for(int i=0;i<p;i++){
+        fin >> a >> b >> c;
+        lp[a].push_back(make_pair(b,c));
+        lp[b].push_back(make_pair(a,c));
+    }
+
+    init();
+
+    dij1();
+    dij2();
+
+    int xr=0,yr=0;
+
+    for(int i=1;i<=n;i++){
+        if(i != x && i != y){
+            //1 caso
+            if(a1[i] > a2[i] && p1[i] >= p2[i])
+                xr++;
+            else if(a2[i] > a1[i] && p2[i] >= p1[i])
+                yr++;
+            //2 caso
+            else if(a1[i] >= a2[i] && p1[i] > p2[i])
+                xr++;
+            else if(a2[i] >= a1[i] && p2[i] > p1[i])
+                yr++;
+            //3 caso
+            else if(a1[i] >= a2[i] && p1[i] != -1 && p2[i] == -1)
+                xr++;
+            else if(a2[i] >= a1[i] && p2[i] != -1 && p1[i] == -1)
+                yr++;
+            //4 caso
+            else if(p1[i] >= p2[i] && a1[i] != -1 && a2[i] == -1)
+                xr++;
+            else if(p2[i] >= p1[i] && a2[i] != -1 && a1[i] == -1)
+                yr++;
+            //5 caso
+            else if(a1[i] != -1 && ( p2[i] == -1 && a2[i] == -1 ))
+                xr++;
+            else if(a2[i] != -1 && ( p1[i] == -1 && a1[i] == -1 ))
+                yr++;
+            //6 caso
+            else if(p1[i] != -1 && ( p2[i] == -1 && a2[i] == -1 ))
+                xr++;
+            else if(p2[i] != -1 && ( p1[i] == -1 && a1[i] == -1 ))
+                yr++;
+            //7 caso
+            else if(p1[i] > p2[i] && ( a1[i] == -1 && a2[i] == -1 ))
+                xr++;
+            else if(p2[i] > p1[i] && ( a1[i] == -1 && a2[i] == -1 ))
+                yr++;
+            //8 caso
+            else if(a1[i] > a2[i] && ( p1[i] == -1 && p2[i] == -1 ))
+                xr++;
+            else if(a2[i] > a1[i] && ( p1[i] == -1 && p2[i] == -1 ))
+                yr++;
+        }
+    }
+
+    cout << xr << ' ' << yr << endl;
+}
