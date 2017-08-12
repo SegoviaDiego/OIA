@@ -1,0 +1,65 @@
+//Timing: 51:09
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n,m,a;
+vector< vector < int > > fechas(MAX);
+int j[MAX];
+
+bool isValid(int x[], vector<int> f, int j1, int j2){
+    for(int i=0;i<f.size();i++){
+        if(f[i] != j1 && f[i] != j2)
+            if(x[f[i]] > 0)
+                return false;
+    }
+
+    return true;
+}
+
+int getBestPath(int index, int r, int v[]){
+    if(index >= m)
+        return r;
+
+    int res = 0, *temp;
+    //rest
+    for(int i=1;i<=n;i++)
+        v[i]--;
+
+    for(int i=0;i<13;i++){
+        for(int j=0;j<13;j++){
+            if(isValid(v, fechas[index], i, j)){
+                temp=v;
+                //cansar
+                for(int x=0;x<fechas[index].size();x++){
+                    if(fechas[index][x] != i && fechas[index][x] != j)
+                        temp[fechas[index][x]]=2;
+                }
+
+                res = max(getBestPath(index+1,r,temp)+1, res);
+            }
+        }
+    }
+
+    return max(getBestPath(index+1,r,v), res);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    for(int i=1;i<=n;i++)
+        j[i]=0;
+
+    for(int i=1;i<=m;i++){
+        for(int j=0;j<13;j++){
+            fin >> a;
+            fechas[i].push_back(a);
+        }
+        fin >> a;
+    }
+
+    int res = 0;
+    res = getBestPath(0, 0, j);
+
+    cout << res << endl;
+}
