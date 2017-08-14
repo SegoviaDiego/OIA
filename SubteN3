@@ -1,0 +1,74 @@
+//Timing: 59:39
+#include <bits/stdc++.h>
+#define MAX 10000
+#define INF 1<<30
+using namespace std;
+struct cmp{
+    operator()(pair< int, vector< int > > a, pair< int, vector< int > > b){
+        return a.second.size() > b.second.size();
+    }
+};
+int n,m,a,b,x,y,ady;
+vector< bool > visitado(MAX, false);
+vector< vector< int > > est(MAX);
+vector< vector< int > > lin(MAX);
+priority_queue< pair< int, vector< int > > , vector< pair< int, vector< int > > > , cmp> Q;
+
+pair< int, vector< int > > dijkstra(int pos, vector<bool> v){
+    pair< int, vector< int > > a,sig,err;
+    int eady, lady;
+    a.first = pos;
+    Q.push(a);
+    while(!Q.empty()){
+        a = Q.top();
+        Q.pop();
+
+        if(v[a.first]) continue;
+        v[a.first] = true;
+
+        a.second.push_back(a.first);
+
+        for(int i=0;i<est[a.first].size();i++){
+            sig = a;
+            lady = est[a.first][i];
+            if(lady == y)
+                return a;
+            else {
+                for(int j=0;j<lin[lady].size();j++){
+                    sig.first = lin[lady][j];
+                    if(!v[sig.first])
+                            Q.push(sig);
+                }
+            }
+        }
+    }
+    return err;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    for(int i=1;i<=n;i++){
+        fin >> a;
+        for(int j=0;j<a;j++){
+            fin >> b;
+            est[i].push_back(b);
+            lin[b].push_back(i);
+        }
+    }
+
+    fin >> x >> y;
+
+    pair< int, vector< int > > res, temp;
+
+    for(int i=0;i<lin[x].size();i++){
+        temp = dijkstra(lin[x][i], visitado);
+        if(temp.second.size() > res.second.size())
+            res = temp;
+    }
+
+    cout << res.second.size() << endl;
+    for(int i=0;i<res.second.size();i++)
+        cout << res.second[i] << ' ';
+}
