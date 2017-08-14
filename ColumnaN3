@@ -1,0 +1,32 @@
+//Timing: 10:34
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,b;
+vector< int > c1,c2;
+
+int gbp(int pos, int val, bool ad, int agc){
+    if(pos > n)
+        return val;
+
+    if(ad){
+        if(agc == 1)
+            return gbp(pos+1, val+c1[pos],false,0);
+        else
+            return gbp(pos+1, val+c2[pos],false,0);
+    }
+
+    return min(gbp(pos+1, val + c1[pos], true, 1),
+               gbp(pos+1, val + c2[pos], true, 2));
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+    n--;
+
+    while( fin >> a >> b){
+        c1.push_back(a);
+        c2.push_back(b);
+    }
+    cout << gbp(0,0,false,0) << endl;
+}
