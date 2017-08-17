@@ -1,0 +1,28 @@
+//Timing: 9:23
+#include <bits/stdc++.h>
+using namespace std;
+int l,a,h,n,x,y,z;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> l >> a >> h >> n;
+
+    int rotados=0, paquetes=1, ptemp=0;
+
+    while(fin >> x >> y >> z){
+        if(ptemp + z <= h)
+            ptemp+=z;
+        else {
+            paquetes++;
+            ptemp = z;
+        }
+
+        if(x > l || y > a){
+            rotados++;
+        }
+    }
+
+    cout << rotados << endl << paquetes << endl;
+
+
+}
