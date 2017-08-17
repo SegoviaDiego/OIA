@@ -1,0 +1,33 @@
+//Timing: 12:01
+#include <bits/stdc++.h>
+using namespace std;
+string s;
+
+string trim(string s){
+    bool space=false;
+    string res="";
+
+    for(int i=0;i<s.size();i++){
+        if(s[i] == char(-53) || s[i] == char(-67))
+            space=true;
+        else {
+            if(space){
+                space=false;
+                res+= char(32);
+            }
+            res+=s[i];
+        }
+    }
+    if(res[0]==char(32))
+        res = res.substr(1, res.size());
+    if(res[res.size()-1]==char(32))
+        res = res.substr(1, res.size()-1);
+    return res;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    getline(fin, s);
+
+    cout << trim(s) << endl;
+}
