@@ -1,0 +1,71 @@
+/*
+    Timing:
+        Reading: 2:12
+        Coding: 37:59
+*/
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n, d,e, maxl=0;
+string a,b;
+vector< string > p, res;
+vector<string>::iterator it;
+vector< vector< int > > lista(MAX);
+vector< bool > v;
+pair<int,int> temp;
+
+void dfs(int index, vector<bool> vis, int l){
+    if(!vis[index]){
+        vis[index]=true;
+
+        if(l > maxl){
+            res.clear();
+            maxl = l;
+            if(find(res.begin(), res.end(), p[index]) == res.end())
+                res.push_back(p[index]);
+        } else if(l == maxl){
+            if(find(res.begin(), res.end(), p[index]) == res.end())
+                res.push_back(p[index]);
+        }
+
+        for(int i=0;i<lista[index].size();i++){
+            dfs(lista[index][i], vis, l+1);
+        }
+    }
+}
+
+void push_safe(string s){
+    it = find(p.begin(), p.end(), s);
+    if(it == p.end()){
+        v.push_back(false);
+        p.push_back(s);
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> a >> b){
+        push_safe(a);
+        push_safe(b);
+
+        it = find(p.begin(), p.end(), a);
+        d = distance(p.begin(), it);
+        it = find(p.begin(), p.end(), b);
+        e = distance(p.begin(), it);
+
+        lista[d].push_back(e);
+        lista[e].push_back(d);
+    }
+
+    for(int i=0;i<p.size();i++)
+        dfs(i, v, 0);
+
+    cout << res.size() << ' ' << maxl << endl;
+
+    sort(res.begin(), res.end());
+
+    for(int i=0;i<res.size();i++)
+        cout << res[i] << endl;
+}
