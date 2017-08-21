@@ -1,0 +1,50 @@
+/*
+    Timing = {
+        "reading": "3:36",
+        "coding": "15:16",
+        "total": 18:52
+    };
+*/
+#include <bits/stdc++.h>
+#define MAX 3005
+using namespace std;
+vector< pair< pair<int,int>, int> > lista(MAX);
+vector< int > winlist;
+int x,y,z,c,s,m;
+int ng=0, maxp=0, nmaxp=0;
+
+void bt(int pos, int pasos, int dinero){
+    if(pasos >= m){
+        if(find(winlist.begin(), winlist.end(), pos) != winlist.end()){
+            ng++;
+            if(dinero > maxp){
+                maxp=dinero;
+                nmaxp=1;
+            } else if(dinero == maxp)
+                nmaxp++;
+        }
+        return;
+    }
+
+    bt(lista[pos].first.first, pasos+1, dinero+lista[pos].second);
+    bt(lista[pos].first.second, pasos+1, dinero);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> c >> s >> m;
+
+    for(int i=1;i<=c;i++){
+        fin >> x >> y >> z;
+        lista[i]= make_pair( make_pair(x,y) , z );
+    }
+
+    for(int i=1;i<=s;i++){
+        fin >> x;
+        winlist.push_back(x);
+    }
+
+    bt(1,0,0);
+
+    cout << ng << ' ' << maxp << ' ' << nmaxp << endl;
+}
