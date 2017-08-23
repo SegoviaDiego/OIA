@@ -1,0 +1,59 @@
+//Timing: 32:37
+#include <bits/stdc++.h>
+using namespace std;
+struct cmp{
+    operator()(pair<int,int> a, pair<int,int> b){
+        return a.second > b.second;
+    }
+};
+int n,v,a,b,maxv=0;
+vector< pair<int,int> > lista;
+
+pair<int,int> ct(int a){
+    int i, temp=0;
+    for(i=0;i<lista.size();i++){
+        if(lista[i].second > 0){
+            if(lista[i].second < a)
+                break;
+            lista[i].second--;
+            temp+=lista[i].first;
+        }
+    }
+    return make_pair(i,temp);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=1;i<=n;i++){
+        fin >> a >> b;
+        lista.push_back(make_pair(a,b));
+    }
+
+    fin >> v;
+
+    sort(lista.begin(), lista.end(), cmp());
+
+    maxv = lista[0].second;
+
+    pair<int,int> temp;
+    int i;
+
+    for(i=maxv;i>0;i--){
+        if(v <= 0)
+            break;
+
+        temp = ct(i);
+        if(temp.second != 0)
+            v-= temp.second;
+        else
+            break;
+    }
+
+    if(v > 0)
+        cout << "Rebasan: " << v << endl;
+    else
+        cout << temp.first << endl << i << endl;
+
+}
