@@ -1,0 +1,60 @@
+//Timing: 27:17
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n,a,b,c,temp, maxg, w;
+bool empate;
+vector< vector< int > > lista(MAX);
+
+pair<int,int> gw(int c){
+    maxg = 0; temp = 0; w = 0;
+    empate=true;
+
+    for(int i=1;i<=n;i++){
+        if(lista[i].size() >= c){
+            empate=false;
+            if(lista[i][c-1] > maxg){
+                temp=1;
+                maxg = lista[i][c-1];
+                w=i;
+            } else if(lista[i][c-1] == maxg)
+                temp++;
+        }
+    }
+
+
+    if(empate)
+        return make_pair(-1,-1);
+    if(temp > 1)
+        return gw(c+1);
+    if(temp == 1)
+        return make_pair(w, c);
+    return make_pair(0,0);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=1;i<=n;i++){
+        fin >> a;
+        temp = 0;
+        for(int j=1;j<=a;j++){
+            fin >> b;
+            temp+=b;
+            lista[i].push_back(temp);
+        }
+    }
+
+    int v;
+    fin >> v;
+
+    pair<int,int> t = gw(v);
+
+    if(t.first == 0)
+        cout << "No hay ganadoras" << endl;
+    else if(t.first == -1)
+        cout << "No se puede desempatar" << endl;
+    else
+        cout << t.first << endl << t.second << ' ' << lista[t.first][t.second-1] << endl;
+}
