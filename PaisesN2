@@ -1,0 +1,108 @@
+//Timing: 36:38
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+
+struct cmpt{
+    operator()(pair<string,string> a, pair<string,string> b){
+        if(a.first == b.first)
+            return a.second > b.second;
+        return a.first > b.first;
+    }
+};
+
+struct cmpp{
+    operator()(pair<string,int> a, pair<string, int> b){
+        return a.first > b.first;
+    }
+};
+
+vector< string > p;
+vector< vector< int > > lista(MAX);
+vector< pair<string, string > > trans;
+vector< pair<string, int > > p2;
+vector< bool > v(MAX, false);
+int n;
+string c,d;
+
+void safepush(string a, string b){
+    int x,y;
+    vector<string>::iterator temp;
+
+    temp = find(p.begin(), p.end(), a);
+    if(temp != p.end())
+        x = distance(p.begin(), temp);
+    else {
+        x = p.size();
+        p.push_back(a);
+    }
+
+    temp = find(p.begin(), p.end(), b);
+    if(temp != p.end())
+        y = distance(p.begin(), temp);
+    else {
+        y = p.size();
+        p.push_back(b);
+    }
+
+    lista[x].push_back(y);
+    lista[y].push_back(x);
+}
+
+bool sc(int a, int b){
+    if(find(lista[a].begin(), lista[a].end(), b) != lista[a].end())
+        return true;
+    return false;
+}
+
+void safepushtrans(int a, int b){
+    if(!sc(a,b)){
+        for(int i=0;i<trans.size();i++){
+            if( (trans[i].first == p[a] && trans[i].second == p[b]) ||
+                (trans[i].first == p[b] && trans[i].second == p[a]) )
+                return;
+        }
+        trans.push_back(make_pair(p[a], p[b]));
+    }
+}
+
+void dfs(int pos, vector<bool> v, int f, int val){
+    v[pos] = true;
+
+    if(val > 1)
+        safepushtrans(f, pos);
+
+    for(int i=0;i<lista[pos].size();i++){
+        if(!v[lista[pos][i]])
+            dfs(lista[pos][i], v, f, val+1);
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> c >> d)
+        safepush(c,d);
+
+    for(int i=0;i<p.size();i++){
+        dfs(i, v, i, 0);
+    }
+
+    for(int i=0;i<p.size();i++)
+        p2.push_back(make_pair( p[i], lista[i].size() ));
+
+    sort(p2.rbegin(), p2.rend(), cmpp());
+
+    for(int i=0;i<p2.size();i++)
+        cout << p2[i].first << ' ' << p2[i].second << endl;
+
+    if(trans.size() == 0)
+        cout << "No hay paises translimitrofes" << endl;
+    else {
+        sort(trans.rbegin(), trans.rend(), cmpt());
+        for(int i=0;i<trans.size();i++){
+            cout << trans[i].first << ' ' << trans[i].second << endl;
+        }
+    }
+}
