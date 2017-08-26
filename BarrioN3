@@ -1,0 +1,41 @@
+//Timing: 13:16
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,k,x,y,maxd=0;
+vector< pair<int,int> > lista;
+vector< pair<int,int> > res;
+
+int gbp(int a, int b){
+    int r=1<<30;
+    for(int i=0;i<lista.size();i++)
+        r = min(r, abs(lista[i].first - a) + abs(lista[i].second - b));
+    return r;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> k;
+
+    while(fin >> x >> y)
+        lista.push_back(make_pair(x,y));
+
+
+    int temp;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            temp = gbp(i,j);
+            if(temp > maxd){
+                res.clear();
+                res.push_back(make_pair(i,j));
+                maxd=temp;
+            } else if(temp == maxd)
+                res.push_back(make_pair(i,j));
+        }
+    }
+
+    cout << maxd << endl << res.size() << endl;
+    for(int i=0;i<res.size();i++)
+        cout << res[i].first << ' ' << res[i].second << endl;
+
+}
