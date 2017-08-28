@@ -1,0 +1,18 @@
+//Timing: 5:03
+#include <bits/stdc++.h>
+using namespace std;
+vector< int > lista(20, 0);
+int n,a,b;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while( fin >> a >> b){
+        if(lista[b] == 0)
+            lista[b] = a;
+    }
+
+    for(int i=1;i<=10;i++)
+        cout << i << ' ' << lista[i] << endl;
+}
