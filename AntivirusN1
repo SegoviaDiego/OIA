@@ -1,0 +1,22 @@
+//Timing: 13:58
+#include <bits/stdc++.h>
+using namespace std;
+string s, res="";
+int n;
+char a, b;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> a >> b >> s;
+
+    for(int i=0;i<s.size()-2;i++){
+        if( s[i] + s[i+1] + s[i+2] == (a+b+a)){
+            res+= s[i];
+            res+= s[i+2];
+            i+=2;
+        } else
+            res+= s[i];
+    }
+
+    cout << res << endl;
+}
