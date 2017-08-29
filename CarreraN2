@@ -1,0 +1,79 @@
+//Timing: 25:44
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int A, cf, cm, L;
+int a, b;
+char c;
+vector< pair<int,int> > p(MAX, make_pair(0,0));
+vector< pair<int,int> > CF, CM;
+vector< pair<pair<int,int>,int> > resF(MAX, make_pair(make_pair(0,0),0));
+vector< pair<pair<int,int>,int> > resM(MAX, make_pair(make_pair(0,0),0));
+
+void setRes(int n, int a, int b){
+    if(b == 2){
+        for(int i=0;i<cf;i++){
+            if(a >= CF[i].first && a <= CF[i].second){
+                if(resF[i].first.first == 0)
+                    resF[i].first.first = n;
+                else if(resF[i].first.second == 0)
+                    resF[i].first.second = n;
+                else if(resF[i].second == 0)
+                    resF[i].second = n;
+
+                return;
+            }
+        }
+    } else {
+        for(int i=0;i<cm;i++){
+            if(a >= CM[i].first && a <= CM[i].second){
+                if(resM[i].first.first == 0)
+                    resM[i].first.first = n;
+                else if(resM[i].first.second == 0)
+                    resM[i].first.second = n;
+                else if(resM[i].second == 0)
+                    resM[i].second = n;
+
+                return;
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> A >> cf >> cm >> L;
+
+    for(int i=0;i<cf;i++){
+        fin >> a >> b;
+        CF.push_back(make_pair(a,b));
+    }
+
+    for(int i=0;i<cm;i++){
+        fin >> a >> b;
+        CM.push_back(make_pair(a,b));
+    }
+
+    for(int i=1;i<=A;i++){
+        fin >> a >> c;
+        if(c == 'M')
+            p[i] = make_pair(a,1);
+        else
+            p[i] = make_pair(a,2);
+    }
+
+    for(int i=1;i<=L;i++){
+        fin >> a;
+        setRes(a, p[a].first, p[a].second);
+    }
+
+    for(int i=0;i<cf;i++){
+        cout << i+1 << ' ' << resF[i].first.first << ' ';
+        cout << resF[i].first.second << ' ' << resF[i].second << endl;
+    }
+
+    for(int i=0;i<cm;i++){
+        cout << i+1 << ' ' << resM[i].first.first << ' ';
+        cout << resM[i].first.second << ' ' << resM[i].second << endl;
+    }
+}
