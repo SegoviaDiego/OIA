@@ -1,0 +1,44 @@
+//Timing: 20:04
+#include <bits/stdc++.h>
+using namespace std;
+int x,y,n,a,b, e=0, pos, res=0;
+vector< pair<int,int> > lista;
+
+int getPos(){
+    for(int i=0;i<lista.size();i++){
+        if(x >= lista[i].first)
+            return i;
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=1;i<=n;i++){
+        fin >> a >> b;
+        lista.push_back(make_pair(a,b));
+    }
+
+    fin >> x >> y;
+
+    pos = getPos();
+
+    while(e >= 0){
+
+        if(lista[pos+1].second > y){
+            e-= abs(lista[pos+1].second - y);
+            if(e > 0)
+                res++;
+        } else
+            e+= abs(lista[pos+1].second - y);
+
+        y = lista[pos+1].second;
+        pos++;
+
+        if(e==0)
+            break;
+    }
+
+    cout << res << endl;
+}
