@@ -1,0 +1,65 @@
+//Timing: 1:27:53
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,pos=0;
+float x, y, e=1;
+vector< int > lista;
+
+void getPos(){
+    int tempx=0;
+    for(int i=0;i<lista.size();i++){
+        if(i > 0)
+            tempx+= abs(lista[i-1] - lista[i]);
+
+        if(tempx >= x ){
+            if(lista[i] > lista[i-1]){
+                y=lista[i] - abs(tempx - x);
+            } else {
+                y=lista[i] + abs(tempx - x);
+            }
+            pos=i-1;
+            return;
+        }
+    }
+}
+
+float getLength(int t){
+    return ceil(sqrt((t*t)*2));
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=0;i<n;i++){
+        fin >> a;
+        lista.push_back(a);
+    }
+
+    fin >> x;
+
+    getPos();
+
+    for(int i=0;i<lista.size();i++){
+
+        if(lista[pos] > lista[pos+1]){
+            e+= getLength(abs(y-lista[pos+1]));
+            x+= abs(y-lista[pos+1]);
+            y = lista[pos+1];
+        } else {
+            if(e==0) break;
+            if(abs(y-lista[pos+1]) >= e){
+                y+=e;
+                x+=e;
+                e=0;
+            } else {
+                e-= getLength(abs(y-lista[pos+1]));
+                x+= abs(y-lista[pos+1]);
+                y = lista[pos+1];
+            }
+        }
+        pos++;
+    }
+
+    cout << x << ' ' << y << endl;
+}
