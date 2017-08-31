@@ -1,0 +1,41 @@
+//Timing: 20:55
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,maxv=0;
+vector< int > lista, res;
+
+int gbp(int p, int v, vector<int> l){
+    if(p >= l.size()-2){
+        if(v > maxv){
+            res = l;
+            maxv=v;
+        }
+        return v;
+    }
+
+    if(l[p] != 0 && l[p+2] != 0){
+        int temp=(l[p]*l[p+2]), t1, t2;
+        t1 = gbp(p+1, v, l);
+        l[p] = 0;
+        l[p+2] = 0;
+        t2 = gbp(p+1, v + temp, l);
+        return max(t1, t2);
+    } else
+        return gbp(p+1, v, l);
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> a)
+        lista.push_back(a);
+
+    cout << gbp(0,0,lista) << endl;
+
+    int t=0;
+    for(int i=0;i<res.size();i++)
+        t+=res[i];
+    cout << t << endl;
+
+}
