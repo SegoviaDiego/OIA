@@ -1,0 +1,45 @@
+//Timing: 27:23
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,a;
+vector< int > lista, temp, res;
+
+bool isc(int pos){
+    temp.clear();
+
+    for(int i=pos;i<pos+m;i++)
+        temp.push_back(lista[i]);
+
+    sort(temp.begin(), temp.end());
+
+    for(int i=0;i<temp.size()-1;i++)
+        if(temp[i] != temp[i+1]-1)
+            return false;
+
+    return true;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    while(fin >> a)
+        lista.push_back(a);
+
+    for(int i=0;i<lista.size()-m;i++){
+        if(isc(i))
+            res.push_back(i+1);
+    }
+
+    cout << res.size() << endl;
+
+    if(res.size() <= 10){
+        for(int i=0;i<res.size();i++)
+            cout << res[i] << ' ';
+    } else {
+        for(int i=0;i<5;i++)
+            cout << res[i] << ' ';
+        for(int i=0;i<5;i++)
+            cout << res[res.size()-i] << ' ';
+    }
+}
