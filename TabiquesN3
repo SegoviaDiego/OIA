@@ -1,0 +1,81 @@
+//Timing: 1:12:28
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n,m,t,a,b,c,d, minx, maxx, maxy, miny;
+vector< vector< int > > M(MAX, vector<int> (MAX, 0));
+vector< vector< bool > > v(MAX, vector<bool> (MAX, false));
+queue< pair<pair<int,int> , int> > Q;
+pair<pair<int,int> , int> sig,act;
+int dir[2][4]={ {1,-1,0,0},{0,0,1,-1} };
+
+bool isValid(int x1, int y1, int x2, int y2, int i){
+    if(i == 0)
+        if(M[x2][y2] != 1 && M[x2][y2] != 3)
+            return true;
+    if(i == 1)
+        if(M[x1][y1] != 1 && M[x1][y1] != 3)
+            return true;
+    if(i == 2)
+        if(M[x2][y2] != 2 && M[x2][y2] != 3)
+            return true;
+    if(i == 3)
+        if(M[x1][y1] != 2 && M[x1][y1] != 3)
+            return true;
+    return false;
+}
+
+void bfs(){
+    Q.push(make_pair(make_pair(0,0), 0));
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(v[act.first.first][act.first.second]) continue;
+        v[act.first.first][act.first.second]=true;
+
+        if(act.first.first == n-1 && act.first.second == m-1){
+            cout << act.second << endl;
+            break;
+        }
+
+        for(int i=0;i<4;i++){
+            sig.first.first = act.first.first + dir[0][i];
+            sig.first.second = act.first.second + dir[1][i];
+            sig.second = act.second + 1;
+            if( (sig.first.first >= 0 && sig.first.first < n) && (sig.first.second >= 0 && sig.first.second < m) )
+                if(!v[sig.first.first][sig.first.second])
+                    if(isValid(act.first.first, act.first.second,sig.first.first, sig.first.second, i))
+                        Q.push(sig);
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> t;
+
+    while(fin >> a >> b >> c >> d){
+        if(a == c){
+            miny = min(b,d);
+            maxy = max(b,d);
+            for(int i=miny;i<maxy;i++){
+                if(M[a][i]!=0)
+                    M[a][i]=3;
+                else
+                    M[a][i]=1;
+            }
+        } else {
+            minx = min(a,c);
+            maxx = max(a,c);
+            for(int i=minx;i<maxx;i++){
+                if(M[i][d]!=0)
+                    M[i][d]=3;
+                else
+                    M[i][d]=2;
+            }
+        }
+    }
+
+    bfs();
+}
