@@ -1,0 +1,50 @@
+//Timing: 24:06
+#include <bits/stdc++.h>
+using namespace std;
+string s1, s2;
+
+void enc(string s){
+    int t=1;
+
+    for(int i=1;i<s.size();i++){
+        if(s[i-1] == s[i])
+            t++;
+        else {
+            if(t > 4)
+                cout << "(" << s[i-1] << t << ")";
+            else if(t > 1){
+                for(int i=0;i<t;i++)
+                    cout << s[i-1];
+            } else
+                cout << s[i-1];
+            t=1;
+        }
+    }
+    if(t > 4)
+        cout << "(" << s[s.size()-1] << t << ")";
+    else if(t > 1){
+        for(int i=0;i<t;i++)
+            cout << s[s.size()-1];
+    } else
+        cout << s[s.size()-1];
+}
+
+void dec(string s){
+    for(int i=0;i<s.size();i++){
+        if(s[i] == '('){
+            for(int j=0;j<abs(int(s[i+2]) - int('0'));j++)
+              cout << s[i+1];
+            i+=3;
+        } else
+            cout << s[i];
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    getline(fin, s1);
+    getline(fin, s2);
+    enc(s1);
+    cout << endl;
+    dec(s2);
+}
