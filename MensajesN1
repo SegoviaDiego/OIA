@@ -1,0 +1,58 @@
+//Timing: 23:18
+#include <bits/stdc++.h>
+using namespace std;
+vector< char > lista;
+int n;
+char a;
+string s;
+
+int gans(int pos){
+    bool t1=true, t2=true;
+    for(int i=0;i<s.size();i++){
+        if(lista[pos+i] != s[i])
+            t1=false;
+        if(lista[pos+i] != s[s.size()-(i+1)])
+            t2=false;
+    }
+
+    if(t1 && t2)
+        return 3;
+    else if(t1)
+        return 1;
+    else if(t2)
+        return 2;
+    return 0;
+}
+
+void escribir(int i){
+    if(i > 0){
+        if(i == 1)
+            cout << "SI" << endl << "I" << endl;
+        else if(i == 2)
+            cout << "SI" << endl << "D" << endl;
+        else
+            cout << "SI" << endl;
+    } else
+        cout << "NO" << endl;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=0;i<n;i++){
+        fin >> a;
+        lista.push_back(a);
+    }
+
+    fin >> s;
+
+    int t=0;
+    for(int i=0;i<lista.size()-(s.size()-1);i++){
+        t = gans(i);
+        if(t!=0)
+            break;
+    }
+
+    escribir(t);
+}
