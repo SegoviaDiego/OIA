@@ -1,0 +1,78 @@
+//Timing: 37:37
+#include <bits/stdc++.h>
+#define MAX 300001
+using namespace std;
+int n,a,c,d,res=1<<30;
+char b, r1, r2;
+vector< vector< int > > lista(MAX);
+vector<bool> v(MAX, false);
+vector<char> tipo(MAX);
+queue< int > Q;
+
+void bfs(vector<bool> V, vector<char> T, char x, char y, char z){
+    int sig,a,temp=0;
+
+    if(T[1] == z){
+        T[1]=x;
+        temp++;
+    }
+
+    Q.push(1);
+
+    while(!Q.empty()){
+        a = Q.front();
+        Q.pop();
+
+        if(V[a]) continue;
+        V[a] = true;
+
+        for(int i=0;i<lista[a].size();i++){
+            sig = lista[a][i];
+            if(!V[sig]){
+                if(T[sig] == z){
+                    temp++;
+                    if(T[a] == x)
+                        T[sig] = y;
+                    else
+                        T[sig] = x;
+                }
+                if(T[a] == T[sig]){
+                    temp++;
+                    if(T[a] == x)
+                            T[sig] = y;
+                        else
+                            T[sig] = x;
+                }
+                Q.push(sig);
+            }
+        }
+    }
+
+    if(temp < res){
+        res = temp;
+        r1 = x;
+        r2 = y;
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> a >> b >> c){
+        tipo[a]=b;
+        for(int i=0;i<c;i++){
+            fin >> d;
+            lista[a].push_back(d);
+        }
+    }
+
+    bfs(v, tipo, 'B', 'C', 'A');
+    bfs(v, tipo, 'C', 'B', 'A');
+    bfs(v, tipo, 'A', 'C', 'B');
+    bfs(v, tipo, 'C', 'A', 'B');
+    bfs(v, tipo, 'A', 'B', 'C');
+    bfs(v, tipo, 'B', 'A', 'C');
+
+    cout << res << ' ' << r1 << ' ' << r2 << endl;
+}
