@@ -1,0 +1,65 @@
+//Timing: 48:48
+#include <bits/stdc++.h>
+#define MAX 20005
+using namespace std;
+pair<int,int> x,y,tempx,tempy, temp;
+vector< vector< int > > m(MAX, vector<int> (MAX, 0));
+
+int main(){
+    ifstream fin("in.txt");
+
+    fin >> x.first >> x.second >> y.first >> y.second;
+
+    x.first+=10000;
+    x.second+=10000;
+    y.first+=10000;
+    y.second+=10000;
+
+    if(x.second > y.second){
+        temp = y;
+        y.second = x.second;
+        x.second = temp.second;
+    }
+
+    if(x.first > y.first){
+        temp = y;
+        y.first = x.first;
+        x.first = temp.first;
+    }
+
+    for(int i=x.first;i<=y.first;i++){
+        for(int j=x.second;j<=y.second;j++){
+            m[i][j]++;
+        }
+    }
+
+    fin >> x.first >> x.second >> y.first >> y.second;
+
+    x.first+=10000;
+    x.second+=10000;
+    y.first+=10000;
+    y.second+=10000;
+
+    if(x.second > y.second){
+        temp = y;
+        y.second = x.second;
+        x.second = temp.second;
+    }
+
+    if(x.first > y.first){
+        temp = y;
+        y.first = x.first;
+        x.first = temp.first;
+    }
+
+    int res=0;
+
+    for(int i=x.first;i<=y.first;i++){
+        for(int j=x.second;j<=y.second;j++){
+            if(m[i][j] == 1)
+                res++;
+        }
+    }
+
+    cout << res << endl;
+}
