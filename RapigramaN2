@@ -1,0 +1,70 @@
+//Timing: 26:55
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n,m;
+string a;
+vector< vector< char > > ad(MAX, vector<char> (MAX));
+vector< string > lista;
+
+string r(string s){
+    string temp="";
+    for(int i=0;i<s.size();i++)
+        temp+=s[(s.size()-1)-i];
+    return temp;
+}
+
+char gp(string s){
+    string temp;
+
+    for(int i=1;i<=n;i++){
+        temp = "";
+        for(int j=1;j<=n;j++)
+            temp+=ad[i][j];
+
+        if(temp.find(s) != string::npos)
+            return 'E';
+        else {
+            temp = r(temp);
+            if(temp.find(s) != string::npos)
+                return 'O';
+        }
+    }
+
+    for(int i=1;i<=n;i++){
+        temp = "";
+        for(int j=1;j<=n;j++)
+            temp+=ad[j][i];
+
+        if(temp.find(s) != string::npos)
+            return 'S';
+        else {
+            temp = r(temp);
+            if(temp.find(s) != string::npos)
+                return 'N';
+        }
+    }
+
+    return '0';
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            fin >> ad[i][j];
+        }
+    }
+
+    while(fin >> a)
+        lista.push_back(a);
+
+    char t;
+    for(int i=0;i<lista.size();i++){
+        t = gp(lista[i]);
+        if(t != '0')
+            cout << i+1 << ' ' << t << endl;
+    }
+}
