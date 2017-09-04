@@ -1,0 +1,23 @@
+//Timing: 7:40
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,a,b,c,temp=0,i;
+vector< int > lista;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    while(fin >> a >> b >> c)
+        lista.push_back(c);
+
+    sort(lista.begin(), lista.end());
+
+    for(i=0;i<lista.size();i++){
+        temp+=lista[i];
+        if(temp >= m)
+            break;
+    }
+
+    cout << lista[i] << endl;
+}
