@@ -1,4 +1,4 @@
-//TIMING: 5:32:12
+//TIMING: 4:40
 5 1 5
 1 2 7
 1 4 2
@@ -14,68 +14,65 @@
 #define INF 1<<30
 using namespace std;
 struct cmp{
-    operator()(pair<int,int> a,pair<int,int> b){
+    operator()(pair<int,int> a, pair<int,int> b){
         return a.second > b.second;
     }
 };
-bool visitado[MAX];
-int distancia[MAX];
-int previo[MAX];
+int n,o,dest,a,b,c;
+vector< int > d(MAX, INF);
+vector< bool > v(MAX, false);
+vector< int > p(MAX);
+priority_queue< pair<int,int>, vector< pair<int,int> > , cmp> Q;
 vector< vector< pair<int,int> > > lista(MAX);
-priority_queue< pair<int,int>, vector< pair<int,int> >, cmp> Q;
-int n,o,d,a,b,c;
 
 void relax(int act, int ady, int peso){
-    if(peso + distancia[act] < distancia[ady]){
-        distancia[ady] = distancia[act] + peso;
-        previo[ady] = act;
-        Q.push(make_pair(ady, distancia[ady]));
+    if(peso + d[act] < d[ady]){
+        d[ady]=peso + d[act];
+        p[ady]=act;
+        Q.push(make_pair(ady, d[ady]));
     }
 }
 
 void dijkstra(){
-    distancia[o]=0;
-    Q.push(make_pair(o,0));
     int act,ady,peso;
+    Q.push(make_pair(o,0));
+    d[o]=0;
     while(!Q.empty()){
         act = Q.top().first;
         Q.pop();
 
-        if(visitado[act]) continue;
-        visitado[act] = true;
+        if(v[act]) continue;
+        v[act] = true;
 
         for(int i=0;i<lista[act].size();i++){
             ady = lista[act][i].first;
-         peso= lista[act][i].second;
-            if(!visitado[ady]) relax(act,ady,peso);
+            peso = lista[act][i].second;
+            if(!v[ady])
+                relax(act,ady,peso);
         }
     }
 }
 
-void escribir(int a) {
-    if(previo[a] != a)
-        escribir(previo[a]);
-    cout << a << ' ';
-}
 
-void init(){
-    for(int i=1;i<=n;i++){
-        visitado[i] = false;
-        distancia[i] = INF;
-        previo[i] = i;
-    }
+void escribir(int a){
+    if(p[a] != a)
+        escribir(p[a]);
+    cout << a << ' ';
 }
 
 int main(){
     ifstream fin("in.txt");
-    fin >> n >> o >> d;
+    fin >> n >> o >> dest;
 
-    init();
+    for(int i=1;i<=n;i++)
+        p[i]=i;
 
-    while(fin >> a >> b >> c)
+    while(fin >> a >> b >> c){
         lista[a].push_back(make_pair(b,c));
+        lista[b].push_back(make_pair(a,c));
+    }
 
     dijkstra();
 
-    escribir(d);
+    escribir(dest);
 }
