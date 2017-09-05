@@ -1,0 +1,37 @@
+//Timing: 18:53
+#include <bits/stdc++.h>
+using namespace std;
+string s;
+
+int main(){
+    ifstream fin("in.txt");
+    getline(fin, s);
+
+    for(int i=0;i<s.size()-1;i++){
+        if(s[i] == 'V'){
+            s[i+1]='R';
+            s[i-1]='A';
+        } else if(s[i] == 'R'){
+            s[i+1]='A';
+            s[i-1]='V';
+        } else if(s[i] == 'A'){
+            s[i+1]='V';
+            s[i-1]='R';
+        }
+    }
+
+    for(int i=s.size()-1;i>0;i--){
+        if(s[i] == 'V'){
+            s[i+1]='R';
+            s[i-1]='A';
+        } else if(s[i] == 'R'){
+            s[i+1]='A';
+            s[i-1]='V';
+        } else if(s[i] == 'A'){
+            s[i+1]='V';
+            s[i-1]='R';
+        }
+    }
+
+    cout << s << endl;
+}
