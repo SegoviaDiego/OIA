@@ -1,0 +1,21 @@
+//Timing: 7:27
+#include <bits/stdc++.h>
+using namespace std;
+int a,b,c, res=0;
+
+void gcp(int x){
+    for(int i=2;i<=c;i++)
+        if(x%i == 0)
+            return;
+    res++;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> a >> b >> c;
+
+    for(int i=a;i<=b;i++)
+        gcp(i);
+
+    cout << res << endl;
+}
