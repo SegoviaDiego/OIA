@@ -1,0 +1,66 @@
+//Timing: 35:23
+#include <bits/stdc++.h>
+#define MAX 10000
+using namespace std;
+int n,m,a,b;
+vector< pair<int,int> > lista;
+vector< vector< int > > adl(MAX);
+vector< bool > v(MAX, false);
+vector< int > r(MAX, 0);
+vector< int > res1, res2, res3;
+bool f,s,t;
+
+void dfs(int a){
+    v[a] = true;
+
+    for(int i=0;i<adl[a].size();i++){
+        if(!v[adl[a][i]])
+            dfs(adl[a][i]);
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    while(fin >> a >> b){
+        adl[a].push_back(b);
+        lista.push_back(make_pair(a,b));
+        r[b]++;
+    }
+
+    for(int i=1;i<=n;i++){
+        if(r[i]==0)
+            res1.push_back(i);
+        else if(r[i]>1)
+            res2.push_back(i);
+    }
+
+    if( (res1.size() == 0 || res1.size() > 1) ||
+        (res2.size() > 0) ||
+        (res1.size() == 0 || res1.size() > 1)){
+            cout << "No" << endl;
+            if(res1.size() == 1) cout << res1[0] << endl;
+            else if(res1.size() == 0) cout << 0 << endl;
+            else {
+                for(int i=0;i<res1.size();i++)
+                    cout << res1[i] << ' ';
+                cout << endl;
+            }
+
+            if(res2.size() > 0){
+                for(int i=0;i<res2.size();i++)
+                    cout << res2[i] << ' ';
+                cout << endl;
+            } else cout << 0 << endl;
+
+            if(res1.size() <= 1) cout << 0 << endl;
+            else {
+                dfs(res1[0]);
+                for(int i=1;i<=n;i++)
+                    if(!v[i])
+                        cout << i << ' ';
+            }
+
+    } else cout << "Si" << ' ' << res1[0] << endl;
+}
