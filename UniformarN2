@@ -1,0 +1,66 @@
+//Timing: 17:33
+#include <bits/stdc++.h>
+#define MAX 2005
+using namespace std;
+int n, rec=0, temp=0;
+vector< vector< char > > ad(MAX, vector<char> (MAX));
+queue< pair<int,int> > Q;
+int dir[2][4] = { {1,-1,0,0},{0,0,1,-1} };
+pair<int,int> act,sig;
+
+void bfs(){
+    char r='0';
+    if(ad[1][1] == r) r='1';
+
+    Q.push(make_pair(1,1));
+
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(ad[act.first][act.second] == r) continue;
+        ad[act.first][act.second] = r;
+
+        for(int i=0;i<4;i++){
+            sig.first = act.first + dir[0][i];
+            sig.second = act.second + dir[1][i];
+            if( (sig.first > 0 && sig.first <= n) && (sig.second > 0 && sig.second <= n) ){
+                if(ad[sig.first][sig.second] != r){
+                    Q.push(sig);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            fin >> ad[i][j];
+        }
+    }
+
+    bool done=true;
+    int res=0;
+
+    while(true){
+        res++;
+        done=true;
+        bfs();
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(ad[i][j] != ad[1][1])
+                    done=false;
+            }
+        }
+
+        if(done)
+            break;
+    }
+
+    cout << res << endl;
+
+}
