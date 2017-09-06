@@ -1,0 +1,49 @@
+//Timing: 24:48
+#include <bits/stdc++.h>
+#define MAX 10001
+using namespace std;
+char a;
+int b,c;
+vector< bool > v(MAX, false);
+vector< vector< int > > lista(MAX, vector<int> (0));
+int act;
+
+void bfs(pair<int,int> a, vector< bool > V){
+    queue< int > Q;
+    Q.push(a.first);
+
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(V[act]) continue;
+        V[act]=true;
+
+        if(act == a.second) break;
+
+        if(lista[act].size() > 0){
+            for(int i=0;i<lista[act].size();i++){
+                if(!v[lista[act][i]])
+                    Q.push(lista[act][i]);
+            }
+        }
+    }
+
+    if(act == a.second)
+        cout << 'S' << endl;
+    else
+        cout << 'N' << endl;
+}
+
+int main(){
+    ifstream fin("in.txt");
+
+    while(fin >> a >> b >> c){
+        if(a == 'P'){
+            bfs(make_pair(b,c), v);
+        } else if(a == 'C') {
+            lista[b].push_back(c);
+            lista[c].push_back(b);
+        }
+    }
+}
