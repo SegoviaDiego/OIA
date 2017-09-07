@@ -1,0 +1,24 @@
+//Timing: 9:16
+#include <bits/stdc++.h>
+using namespace std;
+int L,A,H,n,a,b,c;
+int x=0,y=0,z=0, r=0, p=1;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> L >> A >> H >> n;
+
+
+    while(fin >> a >> b >> c){
+        if(z+c <= H){
+            z+=c;
+            if(a >= L || b >= A)
+                r++;
+        } else {
+            p++;
+            z=c;
+        }
+    }
+
+    cout << r << endl << p << endl;
+}
