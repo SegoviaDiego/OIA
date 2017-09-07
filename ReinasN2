@@ -1,0 +1,86 @@
+//Timing: 30:52
+#include <bits/stdc++.h>
+#define MAX 10001
+#define INF 1<<30
+using namespace std;
+int n,m,a,b;
+unsigned long long t=10000;
+vector< pair<int,int> > lista;
+vector< vector<int> > res(MAX);
+
+void gc(int a){
+    vector< pair<int, int> > temp(8, make_pair(0,INF));
+
+    for(int i=0;i<lista.size();i++){
+        if(i != a){
+            //Izq Der
+            if(lista[i].first == lista[a].first){
+                if(lista[i].second < lista[a].second){
+                    if(abs(lista[i].second - lista[a].second) < temp[0].second)
+                        temp[0] = make_pair(i+1 ,abs(lista[i].second - lista[a].second));
+                } else {
+                    if(abs(lista[i].second - lista[a].second) < temp[1].second)
+                        temp[1] = make_pair(i+1 ,abs(lista[i].second - lista[a].second));
+                }
+                continue;
+            }
+
+            //Arriba Abajo
+            if(lista[i].second == lista[a].second){
+                if(lista[i].first < lista[a].first){
+                    if(abs(lista[i].first - lista[a].first) < temp[2].second)
+                        temp[2] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                } else {
+                    if(abs(lista[i].first - lista[a].first) < temp[3].second)
+                        temp[3] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                }
+                continue;
+            }
+
+            //Diag
+            if(abs(lista[i].first - lista[a].first) == abs(lista[i].second - lista[a].second)){
+                if(lista[i].first < lista[a].first){
+                    if(lista[i].second < lista[a].second){
+                        if(abs(lista[i].first - lista[a].first) < temp[4].second)
+                            temp[4] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                    } else {
+                        if(abs(lista[i].first - lista[a].first) < temp[5].second)
+                            temp[5] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                    }
+                } else {
+                    if(lista[i].first < lista[a].first){
+                        if(abs(lista[i].first - lista[a].first) < temp[6].second)
+                            temp[6] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                    } else {
+                        if(abs(lista[i].first - lista[a].first) < temp[7].second)
+                            temp[7] = make_pair(i+1 ,abs(lista[i].first - lista[a].first));
+                    }
+                }
+            }
+        }
+    }
+
+    for(int i=0;i<temp.size();i++){
+        if(temp[i].second != INF)
+            res[a].push_back(temp[i].first);
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    while(fin >> a >> b)
+        lista.push_back(make_pair(a,b));
+
+    for(int i=0;i<lista.size();i++){
+        gc(i);
+    }
+
+    for(int i=0;i<m;i++){
+        cout << res[i].size();
+        for(int j=0;j<res[i].size();j++)
+            cout << ' ' << res[i][j];
+        cout << endl;
+    }
+}
