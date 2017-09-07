@@ -1,0 +1,60 @@
+//Timing: 35:53
+#include <bits/stdc++.h>
+#define MAX 80001
+using namespace std;
+struct cmp{
+    operator()(pair< pair<int,int>, vector< int > > a, pair< pair<int,int>, vector< int > > b){
+        return a.first.second > b.first.second;
+    }
+};
+vector< vector< pair<pair<int,int>,bool> > > lista(MAX);
+vector< bool > v(MAX, false);
+int n,o,dest,a,b,c;
+pair<pair<int,int>,bool> sig;
+priority_queue<pair< pair<int,int>, vector< int > >, vector< pair< pair<int,int>, vector< int > > >, cmp > Q;
+
+void bfs(){
+    pair< pair<int,int>, vector< int > > act;
+    act.first.first = o;
+    act.first.second = 0;
+    Q.push(act);
+
+    while(!Q.empty()){
+        act = Q.top();
+        Q.pop();
+
+        if(v[act.first.first]) continue;
+        v[act.first.first] = true;
+
+        if(act.first.first == dest){
+            cout << act.first.second << endl;
+            for(int i=0;i<act.second.size();i++)
+                cout << act.second[i] << ' ';
+            return;
+        }
+
+        for(int i=0;i<lista[act.first.first].size();i++){
+            sig = lista[act.first.first][i];
+            if(!v[sig.first.first]){
+                if(sig.second)
+                    act.second.push_back(sig.first.first);
+                Q.push(make_pair(make_pair(sig.first.first, act.first.second + sig.first.second), act.second));
+                if(sig.second)
+                    act.second.pop_back();
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> o >> dest;
+    fin >> n;
+
+    while(fin >> a >> b >> c){
+        lista[a].push_back(make_pair(make_pair(b,c),false));
+        lista[b].push_back(make_pair(make_pair(a,c),true));
+    }
+
+    bfs();
+}
