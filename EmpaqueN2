@@ -1,0 +1,24 @@
+//Timing: 16:24
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,a,b,c;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    int t=0,p=1,x=0,y=0,z=0;
+
+    while(fin >> a >> b >> c){
+        x=max(a,x);
+        y=max(b,y);
+        z+=c;
+
+        if(x+y+z > n){
+            p++;
+            x=a;y=b;z=c;
+        }
+    }
+
+    cout << p << endl;
+}
