@@ -1,0 +1,30 @@
+//Timing: 9:29
+#include <bits/stdc++.h>
+using namespace std;
+int n,a;
+vector< int > lista;
+vector< pair<int,int> > res;
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n;
+
+    while(fin >> a)
+        lista.push_back(a);
+
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(abs(lista[i] - lista[j]) == abs((i+1)-(j+1))){
+                res.push_back(make_pair(i,j));
+                break;
+            }
+        }
+    }
+
+    if(res.size() > 0){
+        cout << "NO" << endl;
+        for(int i=0;i<res.size();i++)
+            cout << '(' << res[i].first+1 << ',' << res[i].second+1 << ')' << endl;
+    } else
+        cout << "SI" << endl;
+}
