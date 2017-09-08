@@ -1,0 +1,63 @@
+//Timing: 34:16
+#include <bits/stdc++.h>
+#define MAX 100000
+using namespace std;
+int n,m,a,b;
+bool done=false;
+vector< pair<int,int> > lista, res;
+vector< bool > v1(MAX, true);
+vector< bool > v2(MAX, true);
+vector< int > l1;
+vector< int > l2;
+
+bool isv(int x, int y, vector<pair<int,int> > v){
+    for(int i=0;i<lista.size();i++){
+        if(lista[i].first == x || lista[i].second == y ||
+           abs(lista[i].first - x) == abs(lista[i].second - y)){
+               return false;
+           }
+    }
+
+    return true;
+}
+
+ void gbp(int p, vector<pair<int,int> > v){
+    if(done) return;
+    if(p >= l1.size()){
+        res = v;
+        done=true;
+        return;
+    }
+
+    for(int j=0;j<l2.size();j++){
+        if(isv(l1[p],l2[j],v)){
+            v.push_back(make_pair(l1[p],l2[j]));
+            gbp(p+1, v);
+            v.pop_back();
+        }
+        if(done) return;
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m;
+
+    while(fin >> a >> b){
+        lista.push_back(make_pair(a,b));
+        v1[a]=false;
+        v2[b]=false;
+    }
+
+    for(int i=1;i<=n;i++){
+        if(v1[i])
+            l1.push_back(i);
+        if(v2[i])
+            l2.push_back(i);
+    }
+
+    gbp(0, res);
+
+    for(int i=0;i<res.size();i++)
+        cout << res[i].first << ' ' << res[i].second << endl;
+}
