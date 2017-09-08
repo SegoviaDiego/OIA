@@ -1,0 +1,24 @@
+//Timing: 9:55
+#include <bits/stdc++.h>
+using namespace std;
+int n,s,a,b;
+vector< pair<int,int> > lista;
+
+int gbp(int p, int v, int x, int y, int z){
+    if(x+y+z > s) return 0;
+    if(x+y+z == s || p >= lista.size()) return v;
+
+    return max( gbp(p+1, v+1, max(x, lista[p].first), max(y, lista[p].second), z+1),
+               max(gbp(p+1, v, x, y, z),
+                   gbp(p+1, v+1, max(x, lista[p].second), max(y, lista[p].first), z+1)));
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> s >> n;
+
+    while(fin >> a >> b)
+        lista.push_back(make_pair(a,b));
+
+    cout << gbp(0,0,0,0,0) << endl;
+}
