@@ -1,0 +1,76 @@
+//Timing: 33:35
+#include <bits/stdc++.h>
+#define MAX 80001
+#define INF 1<<30
+using namespace std;
+int n,o,m,dest,a,b,c,r1=INF,r2=INF,c2;
+vector< vector< pair<pair<int,int>, int> > > lista(MAX);
+vector< bool > v1(MAX,false);
+vector< bool > v2(MAX,false);
+queue<pair<pair<int,int>, int> > Q;
+
+void bfs(){
+    pair<pair<int,int>, int> act;
+    int ady,peso;
+    Q.push(make_pair(make_pair(o,0), 0));
+    while(!Q.empty()){
+        act = Q.front();
+        Q.pop();
+
+        if(act.first.first == dest){
+            if(act.second != 0){
+                if(r2 > act.first.second){
+                    r2=act.first.second;
+                    c2=act.second;
+                }
+            } else {
+                r1=min(r1, act.first.second);
+            }
+        }
+
+        if(act.second == 0){
+            if(v1[act.first.first])
+                continue;
+            v1[act.first.first]=true;
+        }
+
+        if(act.second != 0){
+            if(v2[act.first.first])
+                continue;
+            v2[act.first.first]=true;
+        }
+
+        for(int i=0;i<lista[act.first.first].size();i++){
+            ady = lista[act.first.first][i].first.first;
+            peso = act.first.second + lista[act.first.first][i].first.second;
+            if(lista[act.first.first][i].second != 0){
+                if(act.second == 0)
+                    Q.push(make_pair(make_pair(ady, peso), lista[act.first.first][i].second));
+            } else {
+                Q.push(make_pair(make_pair(ady, peso), act.second));
+            }
+        }
+    }
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> o >> dest >> m;
+
+    int temp=0;
+
+    while(fin >> a >> b >> c){
+        temp++;
+        lista[a].push_back(make_pair(make_pair(b,c), 0));
+        lista[b].push_back(make_pair(make_pair(a,c), temp));
+    }
+
+    bfs();
+
+    cout << r1 << endl;
+
+    if(r2 != INF)
+        cout << r2 << endl << c2 << endl;
+    else
+        cout << "NO ES POSIBLE MEJORAR" << endl;
+}
