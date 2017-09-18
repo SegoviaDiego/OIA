@@ -1,0 +1,42 @@
+//Timing: 17:01
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,h,a,b;
+vector<int> esp(201, 0);
+vector<int> lm, lf;
+
+int main(){
+    ifstream fin("zoo.in");
+    ofstream fout("zoo.out");
+    fin >> n >> m >> h;
+    for(int i=0;i<n;i++){
+        fin >> a >> b;
+        esp[a]=b;
+    }
+    for(int i=0;i<m;i++){
+        fin >> a;
+        lm.push_back(a);
+    }
+    for(int i=0;i<h;i++){
+        fin >> a;
+        lf.push_back(a);
+    }
+
+    int pa=0,pp=0,maxsec=0,sec=0,filt=min(lf.size(), lm.size());
+
+    for(int i=0;i<filt;i++){
+        if(abs(esp[lm[i]] - esp[lf[i]]) >= 4){
+            pp++;
+            maxsec = max(maxsec, sec);
+            sec=0;
+        }
+        else{
+            if(lm[i] == lf[i])
+                pa++;
+            sec++;
+        }
+    }
+    maxsec = max(maxsec, sec);
+
+    fout << pa << ' ' << pp << ' ' << maxsec << endl;
+}
