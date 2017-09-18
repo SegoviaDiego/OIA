@@ -1,0 +1,33 @@
+//Timing: 16:21
+#include <bits/stdc++.h>
+using namespace std;
+int n,a,pos=1,r=0;
+char b;
+vector<bool> res(11, false);
+vector<int> k;
+
+int main(){
+    ifstream fin("truco.in");
+    ofstream fout("truco.out");
+    fin >> n;
+
+    while(!fin.eof() && r != n/2){
+        if(pos > n) pos = 1;
+        if(!res[pos]){
+            fin >> a >> b;
+            if(a == 12){
+                res[pos]=true;
+                k.push_back(pos);
+                r++;
+            }
+        }
+        pos++;
+    }
+
+    for(int i=0;i<k.size();i++)
+        fout << k[i] << ' ';
+    fout << endl;
+    for(int i=1;i<=n;i++)
+        if(!res[i])
+            fout << i << ' ';
+}
