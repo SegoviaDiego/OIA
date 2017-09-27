@@ -13,37 +13,34 @@
 #include <bits/stdc++.h>
 #define MAX 10000
 using namespace std;
-bool v[MAX][MAX];
-char ad[MAX][MAX];
-pair<int,int> sig;
-int n,m,x,y;
+vector< vector< char > > ad(MAX, vector<char> (MAX));
+vector< vector< bool > > v(MAX, vector<bool> (MAX, false));
+pair<int,int> ady;
 int dir[2][4] = { {1,-1,0,0},{0,0,1,-1} };
+int n,m,x,y;
 
-void dfs(pair<int,int> a){
-    v[a.first][a.second] = true;
+void dfs(pair<int,int> act){
+    v[act.first][act.second]=true;
 
-    if(ad[a.first][a.second] == 'S')
-        cout << a.first << ' ' << a.second << endl;
+    if(ad[act.first][act.second] == 'S')
+        cout << 'S' << endl;
 
     for(int i=0;i<4;i++){
-        sig.first = a.first + dir[0][i];
-        sig.second = a.second + dir[1][i];
-
-        if( (sig.first > 0 && sig.first <= n) && (sig.second > 0 && sig.second <= m) )
-            if(!v[sig.first][sig.second] && ad[sig.first][sig.second] != '#')
-                dfs(sig);
+        ady.first = act.first + dir[0][i];
+        ady.second = act.second + dir[1][i];
+        if( (ady.first > 0 && ady.first <= n) && (ady.second > 0 && ady.second <= m) )
+            if(!v[ady.first][ady.second] && ad[ady.first][ady.second] != '#')
+                dfs(ady);
     }
 }
 
 int main(){
     ifstream fin("in.txt");
-
     fin >> n >> m >> x >> y;
 
     for(int i=1;i<=n;i++){
         for(int j=1;j<=m;j++){
             fin >> ad[i][j];
-            v[i][j] = false;
         }
     }
 
