@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,k;
+vector< vector< int > > M(1001, vector<int> (1001));
+vector< pair<int,int> > res;
+
+void val(int x, int y){
+    for(int i=1;i<=k;i++){
+        if(M[x+i][y] > M[(x+i)-1][y])
+            return;
+        if(M[x-i][y] > M[(x-i)+1][y])
+            return;
+        if(M[x][y+i] > M[x][(y+i)-1])
+            return;
+        if(M[x][y-i] > M[x][(y-i)+1])
+            return;
+    }
+
+    for(int i=1;i<=k;i++){
+        for(int j=1;j<=k;j++){
+            if(M[x+i][y+j] > M[x+i][(y+j)-1] || M[x+i][y+j] > M[(x+i)-1][y+j])
+                return;
+            if(M[x-i][y+j] > M[x-i][(y+j)-1] || M[x-i][y+j] > M[(x-i)+1][y+j])
+                return;
+            if(M[x-i][y-j] > M[x-i][(y-j)+1] || M[x-i][y-j] > M[(x-i)+1][y-j])
+                return;
+            if(M[x+i][y-j] > M[x+i][(y-j)+1] || M[x+i][y-j] > M[(x+i)-1][y-j])
+                return;
+        }
+    }
+
+    res.push_back(make_pair(x,y));
+}
+
+int main(){
+    ifstream fin("in.txt");
+    fin >> n >> m >> k;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            fin >> M[i][j];
+        }
+    }
+
+    for(int i=k+1;i<=n-k;i++){
+        for(int j=k+1;j<=m-k;j++){
+            if(M[i][j] >= (k*2)+1) val(i,j);
+        }
+    }
+
+    for(auto p : res){
+        cout << p.first << ' ' << p.second << endl;
+    }
+}
