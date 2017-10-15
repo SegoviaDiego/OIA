@@ -1,0 +1,75 @@
+//Timing: 35:02
+#include <bits/stdc++.h>
+using namespace std;
+string s,ss, k;
+bool pos;
+int x,y;
+
+string encript(string a, char b, char c){
+    pos=true;x = int(b)-int('A');y = int(c)-int('A');
+    k="";
+
+    for(int i=0;i<a.size();i++){
+        if(a[i] != ' '){
+            if(pos) {
+                if(int(a[i]) + x > int('Z'))
+                    k = k + char( int('A') + ( abs( (int(a[i])+x) - int('Z') )-1) );
+                else k = k + char( int(a[i])+x%int('Z') );
+            } else {
+                if(int(a[i]) + y > int('Z'))
+                    k = k + char( int('A') + (( abs( (int(a[i])+y) - int('Z') ) )-1) );
+                else k = k + char( int(a[i])+y%int('Z') );
+            }
+            pos=!pos;
+        }
+    }
+    return k;
+}
+
+string deencript(string a, char b, char c){
+    pos=true; x = int(b)-int('A'); y = int(c)-int('A');
+    k="";
+
+    for(int i=0;i<a.size();i++){
+        if(a[i] != ' '){
+            if(pos) {
+                if(int(a[i]) - x < int('A'))
+                    k = k + char( int('Z') - (( abs( (int(a[i])-x) - int('A') ) )-1) );
+                else k = k + char( int(a[i])-x%int('Z') );
+            } else {
+                if(int(a[i]) - y < int('A'))
+                    k = k + char( int('Z') - (( abs( (int(a[i])-y) - int('A') ) )-1) );
+                else k = k + char( int(a[i])-y%int('Z') );
+            }
+            pos=!pos;
+        }
+    }
+    return k;
+}
+
+string nospace(string a){
+    k="";
+    for(int i=0;i<a.size();i++)
+        if(a[i] != ' ')
+            k = k + a[i];
+    return k;
+}
+
+int main(){
+    ifstream fin("in.txt");
+    getline(fin, s);
+    getline(fin, ss);
+
+    s = nospace(s);
+    ss = nospace(ss);
+    ss.erase(ss.begin() + ss.size()-1);
+
+    for(int i=0;i<=25;i++){
+        for(int j=0;j<=25;j++){
+            if(s.find( encript(ss, char(int('A') + i), char(int('A') + j)) ) != string::npos){
+                cout << deencript(s, char(int('A') + i), char(int('A') + j));
+                break;
+            }
+        }
+    }
+}
